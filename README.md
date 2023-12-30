@@ -17,8 +17,9 @@
 ## 👩🏻‍🔧 백엔드 개발자 소개
  |김지은|박나담|윤서아|
  |:------:|:------:|:------:|
-|<img src="https://github.com/WhatDoYouSing/WhatDoYouSing-Back/assets/109865971/1d02f4e0-5584-4277-8d4c-6427ecd41b4d" width="100" height="100"/>|<img src= "https://github.com/WhatDoYouSing/WhatDoYouSing-Back/assets/109865971/e21932f7-a5a8-4175-9ef8-9d421604aa96" width="100" height="100"/>|<img src= "https://github.com/WhatDoYouSing/WhatDoYouSing-Back/assets/109865971/92bbffac-708f-4fca-b2c6-7521338d1795" width="100" height="100"/>|
+|<img src="https://github.com/WhatDoYouSing/WhatDoYouSing-Back/assets/109865971/a8e2de85-62ef-42ab-a619-92e1f25c5b97" width="100" height="100"/>|<img src= "https://github.com/WhatDoYouSing/WhatDoYouSing-Back/assets/109865971/b105dbcd-c362-46a9-ace0-ffa98d233d19" width="100" height="100"/>|<img src= "https://github.com/WhatDoYouSing/WhatDoYouSing-Back/assets/109865971/3783ccd1-92a3-4641-87db-60170779fcb9" width="100" height="100"/>|
 |로그인 & 회원가입 <br /> 소셜 로그인 <br /> 마이페이지 <br /> 게시글 스크랩|메인 페이지 <br /> 게시글 검색 & 필터링 <br /> 게시글 정렬 <br/> 게시글 신고|게시글 작성 & 삭제 <br /> 감정등록 & 좋아요 <br /> 댓글 & 답댓글 <br/> 레벨 시스템|<br/>
+
 
 ## 🛠️ 사용 스택
   ##### Environment
