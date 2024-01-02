@@ -1,0 +1,12 @@
+db.sqlite3
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+newvenv/
+env.bak/
+venv.bak/
+.env.prod
