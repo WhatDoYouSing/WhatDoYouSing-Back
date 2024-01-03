@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     nickname=models.CharField(max_length=10)
+    #confirm_password=models.CharField(max_length=128)
     report=models.IntegerField(null=True, blank=True)
     count=models.IntegerField(null=True, blank=True)
     profile_choices=[
