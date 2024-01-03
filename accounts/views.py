@@ -50,7 +50,7 @@ class LoginView(views.APIView):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
-            return Response({'message':'로그인 성공', 'data':serializer.data})
+            return Response({'message': "로그인 성공", 'data': serializer.validated_data}, status=HTTP_200_OK)
         return Response({'message':'로그인 실패', 'error':serializer.errors})
     
 class DuplicateIDView(views.APIView):
@@ -63,30 +63,6 @@ class DuplicateIDView(views.APIView):
             response_data = {'duplicate':False}
         
         return Response(response_data, status=HTTP_200_OK)
-
-'''    
-class ChangeUsernameView(views.APIView):
-    serializer_class = UsernameUpdateSerializer
-    
-    def get(self, request, format=None):
-        serializer = self.serializer_class(request.user)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = UsernameUpdateSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            user = request.user
-            new_username = serializer.validated_data['new_username']
-
-            # 새로운 아이디 설정
-            user.set_username(new_username)
-            user.save()
-
-            return Response({'message': '아이디 변경 성공.'}, status=HTTP_200_OK)
-        else:
-            return Response({'message': '올바르지 않은 데이터입니다.'}, status=HTTP_400_BAD_REQUEST)
-'''
     
 class ChangePasswordView(views.APIView):
     serializer_class = PasswordUpdateSerializer
