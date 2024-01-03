@@ -22,9 +22,6 @@ class SignUpSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
-    
-    def update(self, validated_data):
-        password = validated_data.get("password",None)
 
 class ProfileChoiceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,6 +39,7 @@ class LoginSerializer(serializers.Serializer):
 
         if User.objects.filter(username=username).exists():
             user = User.objects.get(username=username)
+
             if not user.check_password(password):
                 raise serializers.ValidationError('잘못된 비밀번호입니다.')
             else:
@@ -51,7 +49,6 @@ class LoginSerializer(serializers.Serializer):
 
                 data = {
                     'id': user.id,
-                    'username': user.username, #이거 없으면 KeyError 뜸
                     'nickname': user.nickname ,
                     'access_token': access
                 }
