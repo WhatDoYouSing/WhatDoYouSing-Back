@@ -6,7 +6,7 @@ urlpatterns = [
     path('signup/profile/', ProfileChoiceView().as_view()),
     path('login/', LoginView.as_view()),
     path('idconfirm/', DuplicateIDView.as_view()),
-    path('update/username/', ChangeUsernameView.as_view()),
+    #path('update/username/', ChangeUsernameView.as_view()),
     path('update/password/', ChangePasswordView.as_view()),
     path('update/nickname/', ChangeNicknameView.as_view()),
     path('duplicate/',DuplicateIDView.as_view()),

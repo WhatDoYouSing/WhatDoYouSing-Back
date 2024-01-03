@@ -59,7 +59,8 @@ class LoginSerializer(serializers.Serializer):
                 return data
         else: 
             raise serializers.ValidationError('존재하지 않는 사용자입니다.')
-        
+
+'''        
 class UsernameUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -70,6 +71,7 @@ class UsernameUpdateSerializer(serializers.ModelSerializer):
     #    if existing_user:
     #        raise serializers.ValidationError('이미 사용 중인 아이디입니다.')
     #    return value
+'''
 
 class NicknameUpdateSerializer(serializers.ModelSerializer):
     class Meta:

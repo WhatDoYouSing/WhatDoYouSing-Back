@@ -63,7 +63,8 @@ class DuplicateIDView(views.APIView):
             response_data = {'duplicate':False}
         
         return Response(response_data, status=HTTP_200_OK)
-    
+
+'''    
 class ChangeUsernameView(views.APIView):
     serializer_class = UsernameUpdateSerializer
     
@@ -85,7 +86,7 @@ class ChangeUsernameView(views.APIView):
             return Response({'message': '아이디 변경 성공.'}, status=HTTP_200_OK)
         else:
             return Response({'message': '올바르지 않은 데이터입니다.'}, status=HTTP_400_BAD_REQUEST)
-
+'''
     
 class ChangePasswordView(views.APIView):
     serializer_class = PasswordUpdateSerializer
