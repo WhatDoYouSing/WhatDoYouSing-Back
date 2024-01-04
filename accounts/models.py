@@ -17,4 +17,5 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    #비밀번호 확인을 위한 필드 모델 / 시리얼라이저 <- 아마 시리얼라이저일듯
     #confirm_password=models.CharField(max_length=128, default='')
