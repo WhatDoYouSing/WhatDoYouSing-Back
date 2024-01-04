@@ -11,4 +11,8 @@ urlpatterns = [
     path('duplicate/',DuplicateIDView.as_view()),
     path('access/', UserAccessView.as_view()),
     path('delete/', UserDeleteView.as_view()),
+
+    path('kakao/', KakaoLoginView.as_view()),
+    path('kakao/callback/',KakaoCallbackView.as_view()),
+    #path('kakao/edit/',MyProfileView.as_view()),
 ]
