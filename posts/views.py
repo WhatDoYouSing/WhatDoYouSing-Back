@@ -34,14 +34,14 @@ class PostView(views.APIView):
         if serializer.is_valid():
             serializer.save(author=request.user)
             return Response(
-                {"message": "포스트 작성 성공", "data": serializer.data}, status=HTTP_200_OK
+                {"message": "가사 작성 성공", "data": serializer.data}, status=HTTP_200_OK
             )
-        return Response({"message": "포스트 작성 실패", "errors": serializer.errors})
+        return Response({"message": "가사 작성 실패", "errors": serializer.errors})
 
     def delete(self, request, pk, format=None):
         post = get_object_or_404(Post, pk=pk)
         post.delete()
-        return Response({"message": "게시물 삭제 성공"})
+        return Response({"message": "가사 삭제 성공"})
         
 class PostScrapView(views.APIView):
 

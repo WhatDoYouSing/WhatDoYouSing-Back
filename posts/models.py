@@ -48,12 +48,11 @@ class Post(models.Model):
     def increase_likes_count(self):
         self.likes_count += 1
         self.save(update_fields=['likes_count'])
-    
+
     scrap = models.ManyToManyField("accounts.User", related_name="scraped_posts", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):
         return self.title
-
 

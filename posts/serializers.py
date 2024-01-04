@@ -18,6 +18,12 @@ class FunctionMixin:
     def get_recomments_count(self, obj):
         return obj.recomments.count()
     
+    def get_com_count(self, obj):
+        comment_count = obj.comment_count()
+        recomment_count = obj.recomment_count()
+
+        return comment_count + recomment_count
+    
     def get_com_likes_count(self, obj):
         return obj.com_likes.count()
     
@@ -26,7 +32,7 @@ class FunctionMixin:
     
     
 class PostSerializer(FunctionMixin, serializers.ModelSerializer):
-    comment_count = serializers.SerializerMethodField() 
+    #comment_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
 
     class Meta:
@@ -43,7 +49,6 @@ class PostSerializer(FunctionMixin, serializers.ModelSerializer):
             "sings_emotion",
             "likes_count",
             "scrap",
-            "comment_count",
         ]
 
         read_only_fields = ["author"]
