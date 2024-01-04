@@ -24,6 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-7qdhw)xp70s4^(30jed+_ibs^&6_e*)jj0^$x!i_dr)oo6a#$&'
 
+KAKAO_CLIENT_ID = '991ca8f0fc27aa18c0852cb21e20c15d'
+KAKAO_APP_ID = '1017616'
+KAKAO_CLIENT_SECRET_KEY = 'O6K2yVMaB1iQFlqphfOPshVVkJJnBZkT'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -41,9 +45,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework',
-    'rest_framework_simplejwt',
     'corsheaders',
+    'rest_framework',
+    'rest_framework.authtoken',
+    "rest_framework_simplejwt",
+    'rest_auth',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_auth.registration',
+    'allauth.socialaccount.providers.kakao',  
 
     'accounts.apps.AccountsConfig',
     'sings.apps.SingsConfig',
@@ -51,6 +62,8 @@ INSTALLED_APPS = [
     'mypage.apps.MypageConfig',
     'posts.apps.PostsConfig',
 ]
+
+SIDE_ID = 1
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -77,6 +90,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',     # 추가
     'django.middleware.common.CommonMiddleware', # 추가
+    'allauth.account.middleware.AccountMiddleware', #추가
 ]
 
 # cors 에러
