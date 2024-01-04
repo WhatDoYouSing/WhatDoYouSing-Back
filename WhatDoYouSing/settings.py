@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'sings.apps.SingsConfig',
     'comments.apps.CommentsConfig',
     'mypage.apps.MypageConfig',
+    'posts.apps.PostsConfig',
 ]
 
 REST_FRAMEWORK = {
