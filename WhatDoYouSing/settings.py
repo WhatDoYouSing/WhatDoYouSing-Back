@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     "rest_framework_simplejwt",
     'rest_auth',
+
+    #카카오관련
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -95,7 +97,7 @@ MIDDLEWARE = [
 # cors 에러
 CORS_ORIGIN_ALLOW_ALL=True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_METHODS = (  #<-실제 요청에 허용되는 HTTP 동사 리스트
+CORS_ALLOW_METHODS = ( 
     'DELETE',
     'GET',
     'OPTIONS',
