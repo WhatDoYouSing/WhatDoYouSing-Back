@@ -39,6 +39,24 @@ class SignUpSerializer(serializers.ModelSerializer):
 
         return user
 
+class KSignUpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id','username','password','nickname']
+
+    def create(self, validated_data):
+        user = User.objects.create(
+            username = validated_data['username'],
+            password = validated_data['password'],
+            nickname = validated_data['nickname'],
+        )
+
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user
+
 class ProfileChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
