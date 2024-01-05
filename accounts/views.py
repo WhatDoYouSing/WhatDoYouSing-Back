@@ -237,8 +237,8 @@ class KakaoCallbackView(views.APIView):
             # 회원 정보 없으면 회원가입 후 로그인
             # def post(self,request):
             print("회원가입")
-            data={'username':social_id,'password':social_id,'nickname':nickname,'profile':profile, 'confirm_password':conf_pw}
-            serializer=SignUpSerializer(data=data)  
+            data={'username':social_id,'password':social_id,'nickname':nickname,'profile':profile}
+            serializer=KSignUpSerializer(data=data)  
             if serializer.is_valid():
                 serializer.save()                          # 회원가입
                 data1={'username':social_id,'password':social_id}
