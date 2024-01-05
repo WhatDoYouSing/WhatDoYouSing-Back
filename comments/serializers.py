@@ -39,6 +39,7 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
         model = Recomment
         fields = [
             "recomment_id",
+            "post",
             "author",
             "author_nickname",
             "com_content",
@@ -59,6 +60,7 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
         model = Comment
         fields = [
             "comment_id",
+            "post",
             "author",
             "author_nickname",
             "com_content",
