@@ -49,6 +49,7 @@ class PostSerializer(FunctionMixin, serializers.ModelSerializer):
             "sings_emotion",
             "likes_count",
             "scrap",
+            "created_at",
         ]
 
         read_only_fields = ["author"]
