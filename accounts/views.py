@@ -219,6 +219,7 @@ class KakaoCallbackView(views.APIView):
         properties = user_info_json.get('properties',{})
         nickname=properties.get('nickname','')
         profile=properties.get('thumbnail_image_url','')
+        conf_pw=properties.get('confirm_password','')
         print(user_info_json)
 
         # 회원가입 및 로그인 처리 
@@ -236,7 +237,7 @@ class KakaoCallbackView(views.APIView):
             # 회원 정보 없으면 회원가입 후 로그인
             # def post(self,request):
             print("회원가입")
-            data={'username':social_id,'password':social_id,'nickname':nickname,'profile':profile}
+            data={'username':social_id,'password':social_id,'nickname':nickname,'profile':profile, 'confirm_password':conf_pw}
             serializer=SignUpSerializer(data=data)  
             if serializer.is_valid():
                 serializer.save()                          # 회원가입
