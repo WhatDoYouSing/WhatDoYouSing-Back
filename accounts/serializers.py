@@ -3,9 +3,25 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import *
 
 class SignUpSerializer(serializers.ModelSerializer):
+    confirm_password = serializers.CharField(max_length=128, write_only=True)
+
     class Meta:
         model = User
-        fields = ['id','username','password','nickname']
+        fields = ['id','username','password','confirm_password','nickname']
+
+    def validate(self, data):
+        # 비밀번호와 확인 비밀번호가 일치하는지 확인
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError('비밀번호와 확인 비밀번호가 일치하지 않습니다.')
+
+        # 필요 없는 confirm_password 필드를 validated_data에서 제거
+        data.pop('confirm_password')
+
+        # 다른 유효성 검사 로직은 그대로 유지
+        if User.objects.filter(username=data['username']).exists():
+            raise serializers.ValidationError('이미 사용 중인 아이디입니다.')
+
+        return data
 
     def create(self, validated_data):
 
@@ -14,7 +30,7 @@ class SignUpSerializer(serializers.ModelSerializer):
 
         user = User.objects.create(
             username=validated_data['username'],
-            password=validated_data['password'],
+            #password=validated_data['password'],
             nickname=validated_data['nickname']
         )
 
