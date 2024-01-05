@@ -18,3 +18,15 @@ class ProfileView(views.APIView):
     def get(self, request, format=None):
         serializer = self.serializer_class(request.user) 
         return Response({'message': '마이페이지 조회 성공', 'data': serializer.data}, status=HTTP_200_OK)
+    
+class ScrapCollectView(views.APIView):
+    serializer_class = ScrapCollectSerializer
+
+class SingsCollectView(views.APIView):
+    serializer_class = SingsCollectSerializer
+
+class CommentsCollectView(views.APIView):
+    serializer_class = CommentsCollectSerializer
+
+class EmotionsCollectView(views.APIView):
+    serializer_class = EmotionsCollectSerializer
