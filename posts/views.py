@@ -51,7 +51,7 @@ class PostScrapView(views.APIView):
         return Response({"scraped": scraped_by_user})
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, id=pk)
+        post = get_object_or_404(Post, pk=pk)
         user = request.user
 
         if user in post.scrap.all():
