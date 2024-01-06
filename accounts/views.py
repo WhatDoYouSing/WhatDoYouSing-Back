@@ -23,7 +23,7 @@ from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 
 # Create your views here.
 
-BASE_URL = 'http://127.0.0.1:8000/'
+BASE_URL = 'http://43.203.57.226'
 
 KAKAO_CONFIG = {
     "KAKAO_REST_API_KEY":getattr(WhatDoYouSing.settings, 'KAKAO_CLIENT_ID', None),
