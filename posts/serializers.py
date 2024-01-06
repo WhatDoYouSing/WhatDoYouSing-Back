@@ -53,3 +53,8 @@ class PostSerializer(FunctionMixin, serializers.ModelSerializer):
         ]
 
         read_only_fields = ["author"]
+
+class EmotionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Emotion
+        fields=['emo_id','content','emo_post','emo_user']

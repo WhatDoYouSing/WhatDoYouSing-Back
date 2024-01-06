@@ -3,19 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Post(models.Model):
-    EMOTION_OPTION_1=models.CharField(max_length=50, null=True) #감정 쾌감
-    EMOTION_OPTION_2=models.CharField(max_length=50, null=True) #감정 벅참
-    EMOTION_OPTION_3=models.CharField(max_length=50, null=True) #감정 신남
-    EMOTION_OPTION_4=models.CharField(max_length=50, null=True) #감정 행복
-    EMOTION_OPTION_5=models.CharField(max_length=50, null=True) #감정 희망
-    EMOTION_OPTION_6=models.CharField(max_length=50, null=True) #감정 설렘
-    EMOTION_OPTION_7=models.CharField(max_length=50, null=True) #감정 평온
-    EMOTION_OPTION_8=models.CharField(max_length=50, null=True) #감정 위로
-    EMOTION_OPTION_9=models.CharField(max_length=50, null=True) #감정 센치함
-    EMOTION_OPTION_10=models.CharField(max_length=50, null=True) #감정 쓸쓸함
-    EMOTION_OPTION_11=models.CharField(max_length=50, null=True) #감정 그리움
-    EMOTION_OPTION_12=models.CharField(max_length=50, null=True) #감정 슬픔
-
+    
     SINGS_EMOTION_CHOICES = [
         ('쾌감', '쾌감'),
         ('벅참', '벅참'),
@@ -56,3 +44,24 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+class Emotion(models.Model):
+
+    EMOTION_CHOICES = [
+        (1, '쾌감'),
+        (2, '벅참'),
+        (3, '신남'),
+        (4, '행복'),
+        (5, '희망'),
+        (6, '설렘'),
+        (7, '평온'),
+        (8, '위로'),
+        (9, '센치함'),
+        (10, '쓸쓸함'),
+        (11, '그리움'),
+        (12, '슬픔'),
+    ]
+
+    emo_id=models.AutoField(primary_key=True)
+    content=models.IntegerField(choices=EMOTION_CHOICES)
+    emo_post=models.ForeignKey(Post, related_name='emo_post',on_delete=models.CASCADE)
+    emo_user=models.ForeignKey("accounts.User", related_name='emo_user',on_delete=models.CASCADE)
