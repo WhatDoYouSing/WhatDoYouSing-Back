@@ -86,7 +86,7 @@ class RecommendView(views.APIView):
 
 class BoothPagination(PageNumberPagination):
     page_size = 15
-
+   
 
 #가사 검색 최신순 정렬
 class SearchLatestView(views.APIView, PaginationHandlerMixin):
@@ -95,7 +95,7 @@ class SearchLatestView(views.APIView, PaginationHandlerMixin):
     def get(self, request):
         keyword= request.GET.get('keyword')
         emo = request.GET.get('emo')
-
+    
         posts = Post.objects.all()
         
         if keyword:
@@ -113,11 +113,10 @@ class SearchLatestView(views.APIView, PaginationHandlerMixin):
 
             posts_latest_seri = SearchSerializer(posts_latest, many=True)
 
-            return Response({'message':'최신순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
+            return Response({'message':'최신순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
         else:
             return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
         
-
 
 #가사 검색 좋아요순 정렬
 class SearchLikesView(views.APIView, PaginationHandlerMixin):
@@ -144,7 +143,7 @@ class SearchLikesView(views.APIView, PaginationHandlerMixin):
 
             posts_likes_seri = SearchSerializer(posts_likes, many=True)
 
-            return Response({'message':'좋아요순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
+            return Response({'message':'좋아요순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
         else:
             return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
      
@@ -174,7 +173,7 @@ class SearchCommentsView(views.APIView, PaginationHandlerMixin):
 
             posts_comments_seri = SearchSerializer(posts_comments, many=True)
 
-            return Response({'message':'댓글순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
+            return Response({'message':'댓글순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
         else:
             return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -195,7 +194,7 @@ class SearchEmoLatestView(views.APIView, PaginationHandlerMixin):
         posts_latest = self.paginate_queryset(posts_latest)
         posts_latest_seri = SearchSerializer(posts_latest, many=True)
         
-        return Response({'message': '감정태그 최신순 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
+        return Response({'message': '감정태그 최신순 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
         
 
 #감정태그 좋아요순 정렬
@@ -214,7 +213,7 @@ class SearchEmoLikesView(views.APIView, PaginationHandlerMixin):
         posts_likes = self.paginate_queryset(posts_likes)
         posts_likes_seri = SearchSerializer(posts_likes, many=True)
         
-        return Response({'message': '감정태그 좋아요순 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
+        return Response({'message': '감정태그 좋아요순 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
         
 
 #감정태그 댓글순 정렬
@@ -233,5 +232,5 @@ class SearchEmoCommentsView(views.APIView, PaginationHandlerMixin):
         posts_comments = self.paginate_queryset(posts_comments)
         posts_comments_seri = SearchSerializer(posts_comments, many=True)
         
-        return Response({'message': '감정태그 댓글순 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
+        return Response({'message': '감정태그 댓글순 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
         
