@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     # providers(카카오가 아니어도, 네이버, 구글, 페이스북 가능)
     'allauth.socialaccount.providers.kakao',  
+    'allauth.account.middleware.AccountMiddleware',
 
     "rest_framework_simplejwt",
 
