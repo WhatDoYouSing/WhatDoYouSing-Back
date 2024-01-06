@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .serializers import *
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from operator import attrgetter
 
 from posts.models import *
 from posts.serializers import *
@@ -26,7 +27,7 @@ class ProfileView(views.APIView):
 class ScrapsCollectView(views.APIView):
     def get(self,request):
         user = request.user
-        myScraps = Post.objects.filter(scrap__in=[user])
+        myScraps = Post.objects.filter(scrap=user).order_by('-created_at')
         myScraps_serializers = [PostSerializer(post).data for post in myScraps]
 
         return Response(myScraps_serializers)
@@ -34,7 +35,7 @@ class ScrapsCollectView(views.APIView):
 
 class PostsCollectView(views.APIView):
     def get(self,request):
-        myPosts = Post.objects.filter(author=request.user)
+        myPosts = Post.objects.filter(author=request.user).order_by('-created_at')
         myPosts_serializers = [PostSerializer(Post) for Post in myPosts]
         myPosts_data = [myPosts_serializer.data for myPosts_serializer in myPosts_serializers]
 
@@ -42,23 +43,30 @@ class PostsCollectView(views.APIView):
   
 
 class CommentsCollectView(views.APIView):
-    def get(self,request):
+    def get(self, request):
         myComments = Comment.objects.filter(author=request.user)
         myRecomments = Recomment.objects.filter(author=request.user)
 
-        myComments_serializers = [CommentSerializer(Comment) for Comment in myComments]
-        myRecomments_serializers = [RecommentSerializer(Recomment) for Recomment in myRecomments]
+        # Combine Comment and Recomment instances into a single list
+        combined_instances = list(myComments) + list(myRecomments)
 
-        myComments_data = [myComments_serializer.data for myComments_serializer in myComments_serializers]
-        myRecomments_data = [myRecomments_serializer.data for myRecomments_serializer in myRecomments_serializers]
+        # Sort the combined list based on created_at in descending order
+        combined_instances.sort(key=attrgetter('created_at'), reverse=True)
+
+        # Serialize the sorted combined instances
+        combined_serializers = [
+            MypageCommentSerializer(instance) if isinstance(instance, Comment) else RecommentSerializer(instance)
+            for instance in combined_instances
+        ]
+
+        combined_data = [serializer.data for serializer in combined_serializers]
 
         Cdata = {
-            'myComments': myComments_data,
-            'myRecomments':myRecomments_data
+            '내가 쓴 댓글/대댓글 최신순 정렬': combined_data
         }
 
         return Response(Cdata)
-
+    
 '''
 class EmotionsCollectView(views.APIView):
 '''
