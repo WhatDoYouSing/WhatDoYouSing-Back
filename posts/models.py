@@ -45,6 +45,7 @@ class Post(models.Model):
         return self.title
 
 class Emotion(models.Model):
+    user = models.ForeignKey("accounts.User", null=True, on_delete=models.CASCADE)  # 게시물 작성자
 
     EMOTION_CHOICES = [
         (1, '쾌감'),
