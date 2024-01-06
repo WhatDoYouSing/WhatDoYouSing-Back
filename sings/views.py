@@ -1,14 +1,19 @@
+import random
+import math
+
 from django.shortcuts import render, get_object_or_404
 from rest_framework import views, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 from .models import *
 from posts.models import *
 from comments.models import *
 from .serializers import *
+from .pagination import PaginationHandlerMixin
 from comments.serializers import CommentSerializer, RecommentSerializer
 from django.db.models import Q, Count
-import random
+
 
 
 #댓글순(defalut) 홈화면 - 가장 좋아요 많이 받은 가사 5개, 댓글 Top10
@@ -79,94 +84,154 @@ class RecommendView(views.APIView):
         return Response({'message': '추천게시물 조회 성공', 'data': random_posts_seri.data}, status=status.HTTP_200_OK)
 
 
+class BoothPagination(PageNumberPagination):
+    page_size = 10
+
+
 #가사 검색 최신순 정렬
-class SearchLatestView(views.APIView):
+class SearchLatestView(views.APIView, PaginationHandlerMixin):
+    pagination_class = BoothPagination
+
     def get(self, request):
         keyword= request.GET.get('keyword')
         emo = request.GET.get('emo')
 
-        posts = Post.objects.filter(Q(lyrics__icontains=keyword))
+        posts = Post.objects.all()
+        
+        if keyword:
+            posts = posts.filter(Q(lyrics__icontains=keyword))
         
         if emo:
             posts = posts.filter(Q(sings_emotion__iexact=emo))
+        
+        if keyword:
+            posts_latest = posts.order_by('-created_at')
 
-        posts_latest = posts.order_by('-created_at')
-        posts_latest_seri = SearchSerializer(posts_latest, many=True)
+            total = posts_latest.__len__()
+            total_page = math.ceil(total/10)
+            posts_latest = self.paginate_queryset(posts_latest)
 
-        return Response({'message':'최신순 가사 검색 성공', 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
+            posts_latest_seri = SearchSerializer(posts_latest, many=True)
+
+            return Response({'message':'최신순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        
 
 
 #가사 검색 좋아요순 정렬
-class SearchLikesView(views.APIView):
+class SearchLikesView(views.APIView, PaginationHandlerMixin):
+    pagination_class = BoothPagination
+
     def get(self, request):
         keyword= request.GET.get('keyword')
         emo = request.GET.get('emo')
 
-        posts = Post.objects.filter(Q(lyrics__icontains=keyword))
+        posts = Post.objects.all()
+        
+        if keyword:
+            posts = posts.filter(Q(lyrics__icontains=keyword))
         
         if emo:
             posts = posts.filter(Q(sings_emotion__iexact=emo))
+        
+        if keyword:
+            posts_likes = posts.order_by('-likes_count')
 
-        posts_likes = posts.order_by('-likes_count')
-        posts_likes_seri = SearchSerializer(posts_likes, many=True)
+            total = posts_likes.__len__()
+            total_page = math.ceil(total/10)
+            posts_likes = self.paginate_queryset(posts_likes)
 
-        return Response({'message':'좋아요순 가사 검색 성공', 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
+            posts_likes_seri = SearchSerializer(posts_likes, many=True)
 
+            return Response({'message':'좋아요순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+     
 
 #가사 검색 댓글순 정렬
-class SearchCommentsView(views.APIView):
+class SearchCommentsView(views.APIView, PaginationHandlerMixin):
+    pagination_class = BoothPagination
+
     def get(self, request):
         keyword= request.GET.get('keyword')
         emo = request.GET.get('emo')
 
-        posts = Post.objects.filter(lyrics__icontains=keyword)
+        posts = Post.objects.all()
+        
+        if keyword:
+            posts = posts.filter(Q(lyrics__icontains=keyword))
         
         if emo:
             posts = posts.filter(Q(sings_emotion__iexact=emo))
+        
+        if keyword:
+            posts_comments =  posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
+        
+            total = posts_comments.__len__()
+            total_page = math.ceil(total/10)
+            posts_comments = self.paginate_queryset(posts_comments)
 
-        #posts_comments = posts.annotate(comments_count=models.F('comment__com_count')).order_by('-comments_count')
-        posts_comments =  posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
-        posts_comments_seri = SearchSerializer(posts_comments, many=True)
+            posts_comments_seri = SearchSerializer(posts_comments, many=True)
 
-        return Response({'message':'댓글순 가사 검색 성공', 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
-
+            return Response({'message':'댓글순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
       
 #감정태그 최신순 정렬
-class SearchEmoLatestView(views.APIView):
+class SearchEmoLatestView(views.APIView, PaginationHandlerMixin):
+    pagination_class = BoothPagination
+    
     def get(self, request):
         emo = request.GET.get('emo')
 
         posts = Post.objects.filter(Q(sings_emotion__iexact=emo))
         
         posts_latest = posts.order_by('-created_at')
+
+        total = posts_latest.__len__()
+        total_page = math.ceil(total/10)
+        posts_latest = self.paginate_queryset(posts_latest)
         posts_latest_seri = SearchSerializer(posts_latest, many=True)
         
-        return Response({'message': '감정태그 최신순 검색 성공', 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
+        return Response({'message': '감정태그 최신순 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
         
 
 #감정태그 좋아요순 정렬
-class SearchEmoLikesView(views.APIView):
+class SearchEmoLikesView(views.APIView, PaginationHandlerMixin):
+    pagination_class = BoothPagination
+    
     def get(self, request):
         emo = request.GET.get('emo')
         
         posts = Post.objects.filter(Q(sings_emotion__iexact=emo))
         
         posts_likes = posts.order_by('-likes_count')
+
+        total = posts_likes.__len__()
+        total_page = math.ceil(total/10)
+        posts_likes = self.paginate_queryset(posts_likes)
         posts_likes_seri = SearchSerializer(posts_likes, many=True)
         
-        return Response({'message':'감정태그 좋아요순 검색 성공', 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
-
+        return Response({'message': '감정태그 좋아요순 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
+        
 
 #감정태그 댓글순 정렬
-class SearchEmoCommentsView(views.APIView):
+class SearchEmoCommentsView(views.APIView, PaginationHandlerMixin):
+    pagination_class = BoothPagination
+    
     def get(self, request):
         emo = request.GET.get('emo')
         
         posts = Post.objects.filter(Q(sings_emotion__iexact=emo))
      
         posts_comments = posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
+        
+        total = posts_comments.__len__()
+        total_page = math.ceil(total/10)
+        posts_comments = self.paginate_queryset(posts_comments)
         posts_comments_seri = SearchSerializer(posts_comments, many=True)
-
-        return Response({'message': '감정태그 댓글순 검색 성공', 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
-
+        
+        return Response({'message': '감정태그 댓글순 검색 성공', 'total': total, 'total_page' : total_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
+        
