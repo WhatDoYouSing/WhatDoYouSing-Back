@@ -119,12 +119,13 @@ class SearchCommentsView(views.APIView):
         keyword= request.GET.get('keyword')
         emo = request.GET.get('emo')
 
-        posts = Post.objects.filter(Q(lyrics__icontains=keyword))
+        posts = Post.objects.filter(lyrics__icontains=keyword)
         
         if emo:
             posts = posts.filter(Q(sings_emotion__iexact=emo))
 
-        posts_comments = posts.annotate(comments_count=models.F('comment__com_count')).order_by('-comments_count')
+        #posts_comments = posts.annotate(comments_count=models.F('comment__com_count')).order_by('-comments_count')
+        posts_comments =  posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
         posts_comments_seri = SearchSerializer(posts_comments, many=True)
 
         return Response({'message':'댓글순 가사 검색 성공', 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
@@ -164,7 +165,7 @@ class SearchEmoCommentsView(views.APIView):
         
         posts = Post.objects.filter(Q(sings_emotion__iexact=emo))
      
-        posts_comments = posts.annotate(comments_count=models.F('comment__com_count')).order_by('-comments_count')
+        posts_comments = posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
         posts_comments_seri = SearchSerializer(posts_comments, many=True)
 
         return Response({'message': '감정태그 댓글순 검색 성공', 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
