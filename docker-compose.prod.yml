@@ -6,9 +6,9 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.prod
-    command: gunicorn MyMap.wsgi:application --bind 0.0.0.0:8000 --timeout=120
+    command: gunicorn WhatDoYouSing.wsgi:application --bind 0.0.0.0:8000 --timeout=120
     environment:
-      DJANGO_SETTINGS_MODULE: MyMap.settings.prod
+      DJANGO_SETTINGS_MODULE: WhatDoYouSing.settings.prod
     env_file:
       - .env
     volumes:
