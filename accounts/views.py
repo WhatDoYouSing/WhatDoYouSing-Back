@@ -93,11 +93,6 @@ class ChangePasswordView(views.APIView):
         if serializer.is_valid():
             user = request.user
             new_password = serializer.validated_data['new_password']
-            confirm_new_password = serializer.validated_data['confirm_new_password']
-
-            # 새로운 비밀번호 확인
-            if new_password != confirm_new_password:
-                return Response({'message': '새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.'}, status=HTTP_400_BAD_REQUEST)
 
             # 새로운 비밀번호 설정
             user.set_password(new_password)

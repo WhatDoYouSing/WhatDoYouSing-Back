@@ -18,7 +18,6 @@ class PaginationHandlerMixin(object):
     def get_paginated_response(self, data):
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
-<<<<<<< HEAD
     
     @property
     def current_page(self):
@@ -27,6 +26,3 @@ class PaginationHandlerMixin(object):
             return self.paginator.page.number
         else:
             return None
-=======
-        
->>>>>>> ae6ca88fd134e09c52d314fce0959a3f24782f00
