@@ -5,12 +5,13 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     nickname=models.CharField(max_length=10, null=True, blank=True)
-    report=models.IntegerField(null=True, blank=True)
+    #report=models.IntegerField(null=True, blank=True)
     
     profile_choices=[
-        ("cd","cd"),
-        ("mic","mic"),
-        ("headset","headset")
+        ("1","1"),
+        ("2","2"),
+        ("3","3"),
+        ("4","4")
     ]
     profile=models.CharField(max_length=7, choices=profile_choices, null=True, blank=True)
 
