@@ -26,10 +26,10 @@ from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 BASE_URL = 'http://43.203.57.226/'
 
 KAKAO_CONFIG = {
-    "KAKAO_REST_API_KEY":getattr(WhatDoYouSing.settings, 'KAKAO_CLIENT_ID', None),
+    "KAKAO_REST_API_KEY":getattr(WhatDoYouSing.settings.base, 'KAKAO_CLIENT_ID', None),
     "KAKAO_REDIRECT_URI": f"http://43.203.57.226/accounts/kakao/callback/",
-    "KAKAO_CLIENT_SECRET_KEY": getattr(WhatDoYouSing.settings, 'KAKAO_CLIENT_SECRET_KEY', None), 
-    "KAKAO_PW":getattr(WhatDoYouSing.settings, 'KAKAO_PW', None),
+    "KAKAO_CLIENT_SECRET_KEY": getattr(WhatDoYouSing.settings.base, 'KAKAO_CLIENT_SECRET_KEY', None), 
+    "KAKAO_PW":getattr(WhatDoYouSing.settings.base, 'KAKAO_PW', None),
 }
 kakao_login_uri = "https://kauth.kakao.com/oauth/authorize"
 kakao_token_uri = "https://kauth.kakao.com/oauth/token"
