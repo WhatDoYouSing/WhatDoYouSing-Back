@@ -20,12 +20,12 @@ class CommentView(views.APIView):
     def get(self, request, post_pk, format=None):
         comments = Comment.objects.filter(post_id=post_pk)
         serializer = self.serializer_class(comments, many=True)
-        return Response(serializer.data)
+        return Response({'message': '댓글조회 성공', 'data': serializer.data})
   
     def post(self, request, post_pk, format=None):
-        serializer = CommentSerializer(data=request.data)
+        serializer = CommentSerializer(data={**request.data, 'post': post_pk})
         if serializer.is_valid():
-            serializer.save(post_id=post_pk, author=request.user)
+            serializer.save(author=request.user)
             return Response({'message': '댓글작성 성공', 'data': serializer.data})
         else:
             return Response({'message': '댓글 작성 실패', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

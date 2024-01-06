@@ -9,4 +9,5 @@ urlpatterns = [
     path("<int:pk>/", PostView.as_view()),
     path("<int:pk>/likes/", PostLikeView.as_view()),
     path("scrap/<int:pk>/", PostScrapView.as_view()),
+    path("<int:post_pk>/emotions/", EmotionView.as_view()),
 ]

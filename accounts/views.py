@@ -219,6 +219,7 @@ class KakaoCallbackView(views.APIView):
         properties = user_info_json.get('properties',{})
         nickname=properties.get('nickname','')
         profile=properties.get('thumbnail_image_url','')
+        conf_pw=properties.get('confirm_password','')
         print(user_info_json)
 
         # 회원가입 및 로그인 처리 
