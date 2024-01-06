@@ -19,7 +19,7 @@ class HomeCommentsView(views.APIView):
         most_likes_seri = LikesSerializer(most_likes, many=True)
 
         #댓글순으로 Top10 게시물
-        top_comments = Post.objects.annotate(comments_count=models.F('comment__com_count')).order_by('-comments_count')[:10]
+        top_comments = Post.objects.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')[:10]
         top_comments_seri = TopSerializer(top_comments, many=True)
 
         data = {
