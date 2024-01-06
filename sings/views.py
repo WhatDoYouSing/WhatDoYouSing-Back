@@ -85,7 +85,7 @@ class RecommendView(views.APIView):
 
 
 class BoothPagination(PageNumberPagination):
-    page_size = 10
+    page_size = 15
 
 
 #가사 검색 최신순 정렬
@@ -108,7 +108,7 @@ class SearchLatestView(views.APIView, PaginationHandlerMixin):
             posts_latest = posts.order_by('-created_at')
 
             total = posts_latest.__len__()
-            total_page = math.ceil(total/10)
+            total_page = math.ceil(total/15)
             posts_latest = self.paginate_queryset(posts_latest)
 
             posts_latest_seri = SearchSerializer(posts_latest, many=True)
@@ -139,7 +139,7 @@ class SearchLikesView(views.APIView, PaginationHandlerMixin):
             posts_likes = posts.order_by('-likes_count')
 
             total = posts_likes.__len__()
-            total_page = math.ceil(total/10)
+            total_page = math.ceil(total/15)
             posts_likes = self.paginate_queryset(posts_likes)
 
             posts_likes_seri = SearchSerializer(posts_likes, many=True)
@@ -169,7 +169,7 @@ class SearchCommentsView(views.APIView, PaginationHandlerMixin):
             posts_comments =  posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
         
             total = posts_comments.__len__()
-            total_page = math.ceil(total/10)
+            total_page = math.ceil(total/15)
             posts_comments = self.paginate_queryset(posts_comments)
 
             posts_comments_seri = SearchSerializer(posts_comments, many=True)
@@ -191,7 +191,7 @@ class SearchEmoLatestView(views.APIView, PaginationHandlerMixin):
         posts_latest = posts.order_by('-created_at')
 
         total = posts_latest.__len__()
-        total_page = math.ceil(total/10)
+        total_page = math.ceil(total/15)
         posts_latest = self.paginate_queryset(posts_latest)
         posts_latest_seri = SearchSerializer(posts_latest, many=True)
         
@@ -210,7 +210,7 @@ class SearchEmoLikesView(views.APIView, PaginationHandlerMixin):
         posts_likes = posts.order_by('-likes_count')
 
         total = posts_likes.__len__()
-        total_page = math.ceil(total/10)
+        total_page = math.ceil(total/15)
         posts_likes = self.paginate_queryset(posts_likes)
         posts_likes_seri = SearchSerializer(posts_likes, many=True)
         
@@ -229,7 +229,7 @@ class SearchEmoCommentsView(views.APIView, PaginationHandlerMixin):
         posts_comments = posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
         
         total = posts_comments.__len__()
-        total_page = math.ceil(total/10)
+        total_page = math.ceil(total/15)
         posts_comments = self.paginate_queryset(posts_comments)
         posts_comments_seri = SearchSerializer(posts_comments, many=True)
         
