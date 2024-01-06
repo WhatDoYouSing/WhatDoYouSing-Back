@@ -238,7 +238,7 @@ class KakaoCallbackView(views.APIView):
             # def post(self,request):
             print("회원가입")
             data={'username':social_id,'password':social_id,'nickname':nickname,'profile':profile}
-            serializer=KSignUpSerializer(data=data)  
+            serializer=SignUpSerializer(data=data)  
             if serializer.is_valid():
                 serializer.save()                          # 회원가입
                 data1={'username':social_id,'password':social_id}

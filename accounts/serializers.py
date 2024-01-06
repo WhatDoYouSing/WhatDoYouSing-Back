@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import *
-
+'''
 class SignUpSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(max_length=128, write_only=True)
 
@@ -38,8 +38,9 @@ class SignUpSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+'''
 
-class KSignUpSerializer(serializers.ModelSerializer):
+class SignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
