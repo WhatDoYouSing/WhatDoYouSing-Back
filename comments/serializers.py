@@ -45,6 +45,7 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "com_content",
             "com_relikes",
             "relikes_count",
+            "created_at"
         ]
     read_only_fields = ["author"]
 
@@ -69,5 +70,25 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "recomments",
             "recomments_count",
             "com_count",
+            "created_at"
+        ]
+    read_only_fields = ["author"]
+
+
+class MypageCommentSerializer(FunctionMixin, serializers.ModelSerializer):
+    likes_count = serializers.SerializerMethodField()
+    author_nickname = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = [
+            "comment_id",
+            "post",
+            "author",
+            "author_nickname",
+            "com_content",
+            "com_likes",
+            "likes_count",
+            "created_at"
         ]
     read_only_fields = ["author"]
