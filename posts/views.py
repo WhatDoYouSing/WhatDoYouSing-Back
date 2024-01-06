@@ -100,7 +100,7 @@ class EmotionView(views.APIView):
             'content':content,
             'emo_post':post.id,
             'emo_user':now_user.id
-        })
+        }) 
         if emotion.is_valid():
             emotion.save()
             return Response({"message": "투표감정 등록 성공","data":emotion.data})
