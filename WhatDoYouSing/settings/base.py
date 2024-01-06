@@ -66,15 +66,14 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     # providers(카카오가 아니어도, 네이버, 구글, 페이스북 가능)
     'allauth.socialaccount.providers.kakao',  
-    'allauth.account.middleware.AccountMiddleware',
 
     "rest_framework_simplejwt",
 
-    'accounts.apps.AccountsConfig',
-    'sings.apps.SingsConfig',
-    'comments.apps.CommentsConfig',
-    'mypage.apps.MypageConfig',
-    'posts.apps.PostsConfig',
+    'accounts',
+    'sings',
+    'comments',
+    'mypage',
+    'posts',
 
 ]
 
@@ -103,10 +102,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # 'allauth.account.middleware.AccountMiddleware', # 추가
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware', # 추가
-    'allauth.account.middleware.AccountMiddleware',
+    #'allauth.account.middleware.AccountMiddleware',
 ]
 
 # cors 
