@@ -8,12 +8,12 @@ class User(AbstractUser):
     #report=models.IntegerField(null=True, blank=True)
     
     profile_choices=[
-        ("1","1"),
-        ("2","2"),
-        ("3","3"),
-        ("4","4")
+        (1,1),
+        (2,2),
+        (3,3),
+        (4,4)
     ]
-    profile=models.CharField(max_length=7, choices=profile_choices, null=True, blank=True)
+    profile=models.IntegerField(max_length=7, choices=profile_choices, null=True, blank=True)
 
     def __str__(self):
         return self.username
