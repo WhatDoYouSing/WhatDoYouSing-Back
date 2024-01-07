@@ -15,15 +15,6 @@ from .models import *
 class PostListView(views.APIView):
     serializer_class = PostSerializer
 
-    def get(self, request):
-        posts = Post.objects.all()  
-        serializer = self.serializer_class(posts, many=True)  
-        return Response(serializer.data)
-
-class PostView(views.APIView):
-    #permission_classes = [IsAuthorOrReadOnly]
-    serializer_class = PostSerializer
-
     def get(self, request, pk, format=None):
         posts = Post.objects.all()
         if not posts:
@@ -32,12 +23,19 @@ class PostView(views.APIView):
         serializer = self.serializer_class(posts, many=True)
         return Response({"message": "포스트 조회 성공", "data": serializer.data}, status=status.HTTP_200_OK)
 
+
+class PostAddView(views.APIView):
+    serializer_class = PostSerializer
+
     def post(self, request, format=None):  # 게시글 작성 POST 메소드
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(author=request.user)
             return Response({"message": "가사 작성 성공", "data": serializer.data}, status=status.HTTP_200_OK)
         return Response({"message": "가사 작성 실패", "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+class PostDelView(views.APIView):
+    serializer_class = PostSerializer
 
     def delete(self, request, pk, format=None):
         post = get_object_or_404(Post, pk=pk)
