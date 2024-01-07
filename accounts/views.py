@@ -45,8 +45,8 @@ class SignUpView(views.APIView):
 
         if serializer.is_valid():
             serializer.save()
-            return Response({'message':'회원가입 성공', 'data':serializer.data}, status=HTTP_200_OK)
-        return Response({'message':'회원가입 실패', 'error':serializer.errors}, status=HTTP_400_BAD_REQUEST)
+            return Response({'message':'회원가입 성공', 'data':serializer.data}, status=status.HTTP_200_OK)
+        return Response({'message':'회원가입 실패', 'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
 class ProfileChoiceView(views.APIView):
     serializer_class = ProfileChoiceSerializer
@@ -71,8 +71,8 @@ class LoginView(views.APIView):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
-            return Response({'message': "로그인 성공", 'data': serializer.validated_data}, status=HTTP_200_OK)
-        return Response({'message':'로그인 실패', 'error':serializer.errors}, status=HTTP_400_BAD_REQUEST)
+            return Response({'message': "로그인 성공", 'data': serializer.validated_data}, status=status.HTTP_200_OK)
+        return Response({'message':'로그인 실패', 'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
     
 class DuplicateIDView(views.APIView):
@@ -84,7 +84,7 @@ class DuplicateIDView(views.APIView):
         else:
             response_data = {'duplicate':False}
         
-        return Response(response_data, status=HTTP_200_OK)
+        return Response(response_data, status=status.HTTP_200_OK)
     
 class ChangePasswordView(views.APIView):
     serializer_class = PasswordUpdateSerializer
@@ -100,9 +100,9 @@ class ChangePasswordView(views.APIView):
             user.set_password(new_password)
             user.save()
 
-            return Response({'message': '비밀번호가 성공적으로 변경되었습니다.'}, status=HTTP_200_OK)
+            return Response({'message': '비밀번호가 성공적으로 변경되었습니다.'}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': '올바르지 않은 데이터입니다.'}, status=HTTP_400_BAD_REQUEST)
+            return Response({'message': '올바르지 않은 데이터입니다.'}, status=status.HTTP_400_BAD_REQUEST)
         
         
 class ChangeNicknameView(views.APIView):
@@ -119,8 +119,8 @@ class ChangeNicknameView(views.APIView):
 
         if serializer.is_valid():
             serializer.save()
-            return Response({'message': '닉네임 변경 성공.', 'data': serializer.data}, status=HTTP_200_OK)
-        return Response({'message': '닉네임 변경 실패.', 'data': serializer.errors}, status=HTTP_400_BAD_REQUEST)
+            return Response({'message': '닉네임 변경 성공.', 'data': serializer.data}, status=status.HTTP_200_OK)
+        return Response({'message': '닉네임 변경 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserDeleteView(views.APIView):
     serializer_class=UserConfirmSerializer
@@ -132,11 +132,11 @@ class UserDeleteView(views.APIView):
             enter_password = serializer.validated_data['enter_password']
 
             if not user.check_password(enter_password):
-                return Response({'message': '접근 실패, 비밀번호가 옳지 않습니다.', 'access':False}, status=HTTP_400_BAD_REQUEST)
+                return Response({'message': '접근 실패, 비밀번호가 옳지 않습니다.', 'access':False}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 #user = request.user
                 user.delete()
-                return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.', 'access':True}, status=HTTP_200_OK)
+                return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.', 'access':True}, status=status.HTTP_200_OK)
     
 class UserAccessView(views.APIView):
     serializer_class=UserConfirmSerializer
