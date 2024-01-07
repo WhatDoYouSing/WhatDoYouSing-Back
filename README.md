@@ -1,6 +1,6 @@
 # WhatDoYouSing-Back
 
-## 🎶 프로젝트 소개
+## 🎶 프로젝트 소개 
 <p align="center">
  <img src="https://github.com/JiwonChoi0805/Ewha-Market/assets/126451052/6a6a6599-6fb0-4fba-8815-35df0aeba1c7" width="80"/>
 </p>
