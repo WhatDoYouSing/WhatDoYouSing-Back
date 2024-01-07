@@ -5,18 +5,18 @@ from django.db import models
 class Post(models.Model):
     
     SINGS_EMOTION_CHOICES = [
-        ('쾌감', '쾌감'),
-        ('벅참', '벅참'),
-        ('신남', '신남'),
-        ('행복', '행복'),
-        ('희망', '희망'),
-        ('설렘', '설렘'),
-        ('평온', '평온'),
-        ('위로', '위로'),
-        ('센치함', '센치함'),
-        ('쓸쓸함', '쓸쓸함'),
-        ('그리움', '그리움'),
-        ('슬픔', '슬픔'),
+        (0, '쾌감'),
+        (1, '벅참'),
+        (2, '신남'),
+        (3, '행복'),
+        (4, '희망'),
+        (5, '설렘'),
+        (6, '평온'),
+        (7, '위로'),
+        (8, '센치함'),
+        (9, '쓸쓸함'),
+        (10, '그리움'),
+        (11, '슬픔'),
     ]
 
     id = models.AutoField(primary_key=True)
@@ -28,7 +28,7 @@ class Post(models.Model):
     singer = models.CharField(max_length=200)
     link = models.CharField(max_length=200, null=True)
 
-    sings_emotion=models.CharField(choices=SINGS_EMOTION_CHOICES,max_length=50) #게시감정
+    sings_emotion=models.IntegerField(choices=SINGS_EMOTION_CHOICES) #게시감정
 
     #likes = models.ManyToManyField("accounts.User", related_name="liked_posts", blank=True)
     likes_count = models.IntegerField(default=0)  # 좋아요 갯수 필드 추가
@@ -48,18 +48,18 @@ class Emotion(models.Model):
     user = models.ForeignKey("accounts.User", null=True, on_delete=models.CASCADE)  # 게시물 작성자
 
     EMOTION_CHOICES = [
-        (1, '쾌감'),
-        (2, '벅참'),
-        (3, '신남'),
-        (4, '행복'),
-        (5, '희망'),
-        (6, '설렘'),
-        (7, '평온'),
-        (8, '위로'),
-        (9, '센치함'),
-        (10, '쓸쓸함'),
-        (11, '그리움'),
-        (12, '슬픔'),
+        (0, '쾌감'),
+        (1, '벅참'),
+        (2, '신남'),
+        (3, '행복'),
+        (4, '희망'),
+        (5, '설렘'),
+        (6, '평온'),
+        (7, '위로'),
+        (8, '센치함'),
+        (9, '쓸쓸함'),
+        (10, '그리움'),
+        (11, '슬픔'),
     ]
 
     emo_id=models.AutoField(primary_key=True)
