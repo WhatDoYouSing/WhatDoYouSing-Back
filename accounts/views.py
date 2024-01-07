@@ -44,8 +44,8 @@ class SignUpView(views.APIView):
 
         if serializer.is_valid():
             serializer.save()
-            return Response({'message':'회원가입 성공', 'data':serializer.data})
-        return Response({'message':'회원가입 실패', 'error':serializer.errors})
+            return Response({'message':'회원가입 성공', 'data':serializer.data}, status=HTTP_200_OK)
+        return Response({'message':'회원가입 실패', 'error':serializer.errors}, status=HTTP_400_BAD_REQUEST)
     
 class ProfileChoiceView(views.APIView):
     serializer_class = ProfileChoiceSerializer
