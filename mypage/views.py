@@ -20,8 +20,8 @@ from posts.models import Emotion
 # Create your views here.
 
 class ProfileView(views.APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]  # 필요에 따라 인증 클래스 추가
-    permission_classes = [IsAuthenticated] 
+    #authentication_classes = [SessionAuthentication, BasicAuthentication]  # 필요에 따라 인증 클래스 추가
+    #permission_classes = [IsAuthenticated] 
 
     serializer_class = ProfileSerializer
 
