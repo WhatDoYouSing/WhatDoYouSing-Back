@@ -20,13 +20,17 @@ class CommentView(views.APIView):
     def get(self, request, post_pk, format=None):
         comments = Comment.objects.filter(post_id=post_pk)
         serializer = self.serializer_class(comments, many=True)
-        return Response({'message': '댓글조회 성공', 'data': serializer.data})
+
+        if not comments.exists():
+            return Response({'message': '댓글이 존재하지 않습니다.'}, status=status.HTTP_200_OK)
+    
+        return Response({'message': '댓글조회 성공', 'data': serializer.data}, status=status.HTTP_200_OK)
   
     def post(self, request, post_pk, format=None):
         serializer = CommentSerializer(data={**request.data, 'post': post_pk})
         if serializer.is_valid():
             serializer.save(author=request.user)
-            return Response({'message': '댓글작성 성공', 'data': serializer.data})
+            return Response({'message': '댓글작성 성공', 'data': serializer.data}, status=status.HTTP_200_OK)
         else:
             return Response({'message': '댓글 작성 실패', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -47,22 +51,25 @@ class RecommentView(views.APIView):
         if serializer.is_valid():
             recomment = serializer.save(comment=comment, author=request.user)
             return Response(
-                {"message": "대댓글 작성 성공", "data": serializer.data})
-        return Response({"message": "대댓글 작성 실패", "data": serializer.errors})
+                {"message": "대댓글 작성 성공", "data": serializer.data}, status=status.HTTP_200_OK)
+        return Response({"message": "대댓글 작성 실패", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class RecommentDelView(views.APIView):
     def delete(self, request, recomment_pk, format=None):
         recomment = get_object_or_404(Recomment, recomment_id=recomment_pk)
         recomment.delete()
-        return Response({"message": "대댓글 삭제 성공"})
+        return Response({"message": "대댓글 삭제 성공"}, status=status.HTTP_204_NO_CONTENT)
    
 
 class CommentLikeView(views.APIView):
 
     def get(self, request, comment_pk):
-        comment = get_object_or_404(Comment, comment_id=comment_pk)
-        liked_by_user = request.user in comment.com_likes.all()
-        return Response({"liked": liked_by_user})
+        try:
+            comment = Comment.objects.get(comment_id=comment_pk)
+            liked_by_user = request.user in comment.com_likes.all()
+            return Response({"liked": liked_by_user}, status=status.HTTP_200_OK)
+        except Comment.DoesNotExist:
+            return Response({"message": "댓글이 존재하지 않습니다."}, status=status.HTTP_200_OK)
 
     def post(self, request, comment_pk):
         comment = get_object_or_404(Comment, comment_id=comment_pk)
@@ -75,15 +82,18 @@ class CommentLikeView(views.APIView):
             comment.com_likes.add(user)
             liked = True
 
-        return Response({"message": "좋아요 변경 성공", "liked": liked})
+        return Response({"message": "좋아요 변경 성공", "liked": liked}, status=status.HTTP_200_OK)
 
 class RecommentLikeView(views.APIView):
 
     def get(self, request, comment_pk, recomment_pk):
-        recomment = get_object_or_404(Recomment, comment_id=comment_pk, pk=recomment_pk)
-        reliked_by_user = request.user in recomment.com_relikes.all()
-        return Response({"reliked": reliked_by_user})
-
+        try:
+            recomment = get_object_or_404(Recomment, id=recomment_pk, comment_id=comment_pk)
+            reliked_by_user = request.user in recomment.com_relikes.all()
+            return Response({"reliked": reliked_by_user}, status=status.HTTP_200_OK)
+        except Recomment.DoesNotExist:
+            return Response({"message": "해당하는 댓글이나 대댓글이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+        
     def post(self, request, comment_pk, recomment_pk):
         recomment = get_object_or_404(Recomment, comment_id=comment_pk, pk=recomment_pk)
         user = request.user
@@ -95,4 +105,4 @@ class RecommentLikeView(views.APIView):
             recomment.com_relikes.add(user)
             reliked = True
 
-        return Response({"message": "대댓글 좋아요 변경 성공", "reliked": reliked})
+        return Response({"message": "대댓글 좋아요 변경 성공", "reliked": reliked}, status=status.HTTP_200_OK)
