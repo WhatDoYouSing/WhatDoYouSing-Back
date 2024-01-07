@@ -15,6 +15,7 @@ from .serializers import *
 import WhatDoYouSing
 import requests
 import allauth
+from rest_framework import generics
 
 #from rest_auth.registration.views import SocialLoginView                   
 from allauth.socialaccount.providers.kakao import views as kakao_views     
@@ -54,7 +55,16 @@ class ProfileChoiceView(views.APIView):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
 
-    
+    def patch(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response({'message': '프로필 지정 성공.', 'data': serializer.data}, status=HTTP_200_OK)
+
+    '''
     def patch(self, request, format=None):
         user = request.user
         serializer = self.serializer_class(user, data=request.data, partial=True)
@@ -63,7 +73,7 @@ class ProfileChoiceView(views.APIView):
             serializer.save()
             return Response({'message': '프로필 지정 성공.', 'data': serializer.data}, status=HTTP_200_OK)
         return Response({'message': '프로필 지정 실패.', 'data': serializer.errors}, status=HTTP_400_BAD_REQUEST)
-
+    '''
     
 class LoginView(views.APIView):
     serializer_class = LoginSerializer
@@ -88,6 +98,7 @@ class DuplicateIDView(views.APIView):
     
 class ChangePasswordView(views.APIView):
     serializer_class = PasswordUpdateSerializer
+
     def post(self, request, format=None):
         serializer = PasswordUpdateSerializer(data=request.data)
         
