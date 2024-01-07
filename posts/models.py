@@ -21,9 +21,9 @@ class Post(models.Model):
 
     id = models.AutoField(primary_key=True)
     author = models.ForeignKey("accounts.User", null=True, on_delete=models.CASCADE)  # 게시물 작성자
-    lyrics = models.CharField(max_length=60)
+    lyrics = models.CharField(max_length=200)
     #투표감정 여기에 추가 (others_emotion)
-    content = models.TextField(max_length=150)
+    content = models.TextField(max_length=300)
     title = models.CharField(max_length=200)
     singer = models.CharField(max_length=200)
     link = models.CharField(max_length=200, null=True)
