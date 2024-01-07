@@ -67,6 +67,12 @@ class ProfileChoiceView(views.APIView):
 class LoginView(views.APIView):
     serializer_class = LoginSerializer
     
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            return Response({'message': "로그인 성공", 'data': serializer.validated_data}, status=HTTP_200_OK)
+        return Response({'message':'로그인 실패', 'error':serializer.errors}, status=HTTP_400_BAD_REQUEST)
     
     
 class DuplicateIDView(views.APIView):
