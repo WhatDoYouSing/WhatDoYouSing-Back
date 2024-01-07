@@ -73,7 +73,7 @@ class LoginView(views.APIView):
 
         if serializer.is_valid():
             return Response({'message': "로그인 성공", 'data': serializer.validated_data}, status=HTTP_200_OK)
-        return Response({'message':'로그인 실패', 'error':serializer.errors})
+        return Response({'message':'로그인 실패', 'error':serializer.errors}, status=HTTP_400_BAD_REQUEST)
     
 class DuplicateIDView(views.APIView):
     def post(self, request):
