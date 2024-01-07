@@ -55,7 +55,7 @@ class ProfileChoiceView(views.APIView):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
 
-    def patch(self, request, format=None):
+    def post(self, request, format=None):
         user = request.user
         serializer = self.serializer_class(user, data=request.data, partial=True)
         user.set_profile()
@@ -124,7 +124,8 @@ class ChangeNicknameView(views.APIView):
 
 class UserDeleteView(views.APIView):
     serializer_class=UserConfirmSerializer
-    def post(self, request):
+
+    def delete(self, request):
         serializer = UserConfirmSerializer(data=request.data)
 
         if serializer.is_valid():
