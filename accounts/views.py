@@ -89,7 +89,7 @@ class DuplicateIDView(views.APIView):
 class ChangePasswordView(views.APIView):
     serializer_class = PasswordUpdateSerializer
 
-    def post(self, request, format=None):
+    def patch(self, request, format=None):
         serializer = PasswordUpdateSerializer(data=request.data)
         
         if serializer.is_valid():
