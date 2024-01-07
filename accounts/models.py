@@ -13,7 +13,7 @@ class User(AbstractUser):
         (3,3),
         (4,4)
     ]
-    profile=models.IntegerField(max_length=7, choices=profile_choices, null=True, blank=True)
+    profile=models.IntegerField(choices=profile_choices, null=True, blank=True)
 
     def __str__(self):
         return self.username
