@@ -95,15 +95,16 @@ class SearchLatestView(views.APIView, PaginationHandlerMixin):
     def get(self, request):
         keyword= request.GET.get('keyword')
         emo = request.GET.get('emo')
-    
-        posts = Post.objects.all()
         
+        posts = Post.objects.all()
+            
         if keyword:
             posts = posts.filter(Q(lyrics__icontains=keyword))
-        
+            
         if emo:
-            posts = posts.filter(Q(sings_emotion__iexact=emo))
-        
+            #posts = posts.filter(Q(sings_emotion__iexact=emo))
+            posts = posts.filter(Q(sings_emotion__iexact=str(emo)))
+            
         if keyword:
             posts_latest = posts.order_by('-created_at')
 
@@ -116,7 +117,7 @@ class SearchLatestView(views.APIView, PaginationHandlerMixin):
             return Response({'message':'최신순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
         else:
             return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-        
+            
 
 #가사 검색 좋아요순 정렬
 class SearchLikesView(views.APIView, PaginationHandlerMixin):
@@ -132,7 +133,7 @@ class SearchLikesView(views.APIView, PaginationHandlerMixin):
             posts = posts.filter(Q(lyrics__icontains=keyword))
         
         if emo:
-            posts = posts.filter(Q(sings_emotion__iexact=emo))
+            posts = posts.filter(Q(sings_emotion__iexact=str(emo)))
         
         if keyword:
             posts_likes = posts.order_by('-likes_count')
@@ -162,7 +163,7 @@ class SearchCommentsView(views.APIView, PaginationHandlerMixin):
             posts = posts.filter(Q(lyrics__icontains=keyword))
         
         if emo:
-            posts = posts.filter(Q(sings_emotion__iexact=emo))
+            posts = posts.filter(Q(sings_emotion__iexact=str(emo)))
         
         if keyword:
             posts_comments =  posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
@@ -185,7 +186,7 @@ class SearchEmoLatestView(views.APIView, PaginationHandlerMixin):
     def get(self, request):
         emo = request.GET.get('emo')
 
-        posts = Post.objects.filter(Q(sings_emotion__iexact=emo))
+        posts = Post.objects.filter(Q(sings_emotion__iexact=str(emo)))
         
         posts_latest = posts.order_by('-created_at')
 
@@ -204,7 +205,7 @@ class SearchEmoLikesView(views.APIView, PaginationHandlerMixin):
     def get(self, request):
         emo = request.GET.get('emo')
         
-        posts = Post.objects.filter(Q(sings_emotion__iexact=emo))
+        posts = Post.objects.filter(Q(sings_emotion__iexact=str(emo)))
         
         posts_likes = posts.order_by('-likes_count')
 
@@ -223,7 +224,7 @@ class SearchEmoCommentsView(views.APIView, PaginationHandlerMixin):
     def get(self, request):
         emo = request.GET.get('emo')
         
-        posts = Post.objects.filter(Q(sings_emotion__iexact=emo))
+        posts = Post.objects.filter(Q(sings_emotion__iexact=str(emo)))
      
         posts_comments = posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
         
