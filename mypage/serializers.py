@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, MyPage
+from .models import User
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:

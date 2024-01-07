@@ -24,7 +24,7 @@ from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 
 # Create your views here.
 
-BASE_URL = 'http://43.203.57.226/'
+BASE_URL = 'http://whatdoyousing.com/'
 #BASE_URL = 'http://127.0.0.1:8000/'
 
 KAKAO_CONFIG = {
@@ -55,25 +55,14 @@ class ProfileChoiceView(views.APIView):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
 
-    def patch(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        return Response({'message': '프로필 지정 성공.', 'data': serializer.data}, status=HTTP_200_OK)
-
-    '''
     def patch(self, request, format=None):
         user = request.user
         serializer = self.serializer_class(user, data=request.data, partial=True)
-
+        user.set_profile()
         if serializer.is_valid():
             serializer.save()
             return Response({'message': '프로필 지정 성공.', 'data': serializer.data}, status=HTTP_200_OK)
         return Response({'message': '프로필 지정 실패.', 'data': serializer.errors}, status=HTTP_400_BAD_REQUEST)
-    '''
     
 class LoginView(views.APIView):
     serializer_class = LoginSerializer
@@ -150,6 +139,7 @@ class UserDeleteView(views.APIView):
     
 class UserAccessView(views.APIView):
     serializer_class=UserConfirmSerializer
+    
     def post(self, request):
         serializer = UserConfirmSerializer(data=request.data)
 

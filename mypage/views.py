@@ -21,13 +21,13 @@ from posts.models import Emotion
 
 class ProfileView(views.APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]  # 필요에 따라 인증 클래스 추가
-    permission_classes = [IsAuthenticated] 
+    #permission_classes = [IsAuthenticated] 
 
     serializer_class = ProfileSerializer
 
     def get(self, request, format=None):
         serializer = self.serializer_class(request.user) 
-        return Response({'message': '마이페이지 조회 성공', 'data': serializer.data}, status=HTTP_200_OK)
+        return Response({'message': '마이페이지 조회 성공', 'data': serializer.validated_data}, status=HTTP_200_OK)
 
 class MypagePagination(PageNumberPagination):
     page_size = 15
