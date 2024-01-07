@@ -139,6 +139,7 @@ class UserDeleteView(views.APIView):
     
 class UserAccessView(views.APIView):
     serializer_class=UserConfirmSerializer
+    
     def post(self, request):
         serializer = UserConfirmSerializer(data=request.data)
 
