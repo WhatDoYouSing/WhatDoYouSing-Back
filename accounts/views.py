@@ -131,19 +131,12 @@ class ChangeNicknameView(views.APIView):
         return Response(serializer.data)
 
     def patch(self, request, format=None):
-        serializer = NicknameUpdateSerializer(data=request.data)
+        serializer = NicknameUpdateSerializer(request.user, data=request.data, partial=True)
         
         if serializer.is_valid():
-            user = request.user
-            new_nickname = serializer.validated_data['new_nickname']
-
-            # 새로운 비밀번호 설정
-            user.nickname = new_nickname
-            user.save()
-
-            return Response({'message': '닉네임이 성공적으로 변경되었습니다.'}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message': '올바르지 않은 데이터입니다.'}, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+            return Response({'message': '닉네임 변경 성공.', 'data': serializer.data}, status=status.HTTP_200_OK)
+        return Response({'message': '닉네임 변경 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserDeleteView(views.APIView):
     serializer_class=UserConfirmSerializer
