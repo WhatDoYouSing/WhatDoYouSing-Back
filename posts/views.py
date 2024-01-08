@@ -16,12 +16,21 @@ class PostListView(views.APIView):
     serializer_class = PostSerializer
 
     def get(self, request, pk, format=None):
-        posts = Post.objects.all()
-        if not posts:
-            return Response({"message": "포스트가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            post = Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            return Response({"message": "가사가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.serializer_class(posts, many=True)
-        return Response({"message": "포스트 조회 성공", "data": serializer.data}, status=status.HTTP_200_OK)
+        serializer = self.serializer_class(post)
+        return Response({"message": "가사 조회 성공", "data": serializer.data}, status=status.HTTP_200_OK)
+
+    # def get(self, request, pk, format=None):
+    #     posts = Post.objects.all()
+    #     if not posts:
+    #         return Response({"message": "포스트가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     serializer = self.serializer_class(posts, many=True)
+    #     return Response({"message": "포스트 조회 성공", "data": serializer.data}, status=status.HTTP_200_OK)
 
 
 class PostAddView(views.APIView):
