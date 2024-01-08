@@ -37,6 +37,7 @@ kakao_login_uri = "https://kauth.kakao.com/oauth/authorize"
 kakao_token_uri = "https://kauth.kakao.com/oauth/token"
 kakao_profile_uri = "https://kapi.kakao.com/v2/user/me"
 
+#자체 회원가입, 프로필 설정 포함
 class SignUpView(views.APIView):
     serializer_class = SignUpSerializer
 
@@ -47,6 +48,7 @@ class SignUpView(views.APIView):
             serializer.save()
             return Response({'message':'회원가입 성공', 'data':serializer.data}, status=status.HTTP_200_OK)
         return Response({'message':'회원가입 실패', 'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
     
 class ProfileChoiceView(views.APIView):
     serializer_class = ProfileChoiceSerializer
@@ -230,7 +232,7 @@ class KakaoCallbackView(views.APIView):
             # def post(self,request):
             print("회원가입")
             data={'username':social_id,'password':social_id,'nickname':nickname,'profile':profile}
-            serializer=SignUpSerializer(data=data)  
+            serializer=KSignUpSerializer(data=data)  
             if serializer.is_valid():
                 serializer.save()                          # 회원가입
                 data1={'username':social_id,'password':social_id}
