@@ -93,7 +93,7 @@ class ChangePasswordView(views.APIView):
     def patch(self, request, format=None):
         serializer = PasswordUpdateSerializer(request.user, data=request.data)
         
-        '''if serializer.is_valid():
+        if serializer.is_valid():
             user = request.user
             new_password = serializer.validated_data['new_password']
 
@@ -104,12 +104,6 @@ class ChangePasswordView(views.APIView):
             return Response({'message': '비밀번호가 성공적으로 변경되었습니다.'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': '올바르지 않은 데이터입니다.'}, status=status.HTTP_400_BAD_REQUEST)
-            '''
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': '비밀번호가 성공적으로 변경되었습니다.'}, status=status.HTTP_200_OK)
-        return Response({'message': '올바르지 않은 데이터입니다.'}, status=status.HTTP_400_BAD_REQUEST)
         
 
 class ChangeNicknameView(views.APIView):
