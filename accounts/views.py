@@ -138,7 +138,7 @@ class ChangeNicknameView(views.APIView):
             new_nickname = serializer.validated_data['new_nickname']
 
             # 새로운 비밀번호 설정
-            user.set_nickname(new_nickname)
+            user.nickname = new_nickname
             user.save()
 
             return Response({'message': '닉네임이 성공적으로 변경되었습니다.'}, status=status.HTTP_200_OK)
