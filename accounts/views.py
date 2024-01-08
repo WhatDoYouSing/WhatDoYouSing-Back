@@ -123,7 +123,7 @@ class ChangeNicknameView(views.APIView):
 class UserDeleteView(views.APIView):
     serializer_class=UserConfirmSerializer
 
-    def delete(self, request):
+    def post(self, request):
         serializer = UserConfirmSerializer(data=request.data)
 
         if serializer.is_valid():
