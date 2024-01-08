@@ -120,7 +120,8 @@ class ChangeNicknameView(views.APIView):
             serializer.save()
             return Response({'message': '닉네임 변경 성공.', 'data': serializer.validated_data}, status=status.HTTP_200_OK)
         return Response({'message': '닉네임 변경 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-        
+
+'''        
 class UserDeleteView(views.APIView):
     serializer_class=UserConfirmSerializer
 
@@ -136,7 +137,26 @@ class UserDeleteView(views.APIView):
             else:
                 user.delete()
                 return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.', 'access':True}, status=status.HTTP_200_OK)
-    
+'''
+
+class UserDeleteView(generics.DestroyAPIView):
+    serializer_class = UserDeleteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        password = serializer.validated_data['password']
+
+        if not user.check_password(password):
+            return Response({'message': '접근 실패, 비밀번호가 옳지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.delete()
+
+        return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.'}, status=status.HTTP_200_OK)
+
 class UserAccessView(views.APIView):
     serializer_class=UserConfirmSerializer
 

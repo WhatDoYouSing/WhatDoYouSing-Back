@@ -87,3 +87,6 @@ class PasswordUpdateSerializer(serializers.Serializer):
 
 class UserConfirmSerializer(serializers.Serializer):
     enter_password = serializers.CharField(max_length=128, write_only=True)
+
+class UserDeleteSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=128, write_only=True)
