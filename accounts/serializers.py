@@ -85,8 +85,8 @@ class NicknameUpdateSerializer(serializers.ModelSerializer):
 class PasswordUpdateSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length=128, write_only=True)
 
-class UserConfirmSerializer(serializers.Serializer):
-    enter_password = serializers.CharField(max_length=128, write_only=True)
+class UserAccessSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=128, write_only=True)
 
 class UserDeleteSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=128, write_only=True)
