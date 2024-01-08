@@ -14,5 +14,4 @@ urlpatterns = [
 
     path('kakao/', KakaoLoginView.as_view()),
     path('kakao/callback/',KakaoCallbackView.as_view()),
-    #path('kakao/edit/',MyProfileView.as_view()),
 ]
