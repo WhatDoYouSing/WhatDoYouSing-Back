@@ -55,7 +55,7 @@ class ProfileChoiceView(views.APIView):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
 
-    def post(self, request, format=None):
+    def patch(self, request, format=None):
         serializer = ProfileChoiceSerializer(request.user, data=request.data)
         
         if serializer.is_valid():
