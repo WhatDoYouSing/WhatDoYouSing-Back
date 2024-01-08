@@ -13,5 +13,5 @@ urlpatterns = [
     path('delete/', UserDeleteView.as_view()),
 
     path('kakao/', KakaoLoginView.as_view()),
-    path('kakao/callback/',KakaoCallbackView.as_view()),
+    #path('kakao/callback/',KakaoCallbackView.as_view()),
 ]

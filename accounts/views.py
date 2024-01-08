@@ -198,6 +198,7 @@ class UserAccessView(generics.RetrieveAPIView):
 
         return Response({'message': '접근 성공', 'data': user_data}, status=status.HTTP_200_OK)
 
+
 #카카오
 class KakaoLoginView(views.APIView):
     permission_classes = (AllowAny,)
