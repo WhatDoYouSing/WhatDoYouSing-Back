@@ -47,7 +47,7 @@ class LoginSerializer(serializers.Serializer):
                 data = {
                     'id': user.id,
                     'username':user.username,
-                    'nickname': user.nickname ,
+                    'nickname': user.nickname,
                     'profile':user.profile,
                     'access_token': access
                 }
