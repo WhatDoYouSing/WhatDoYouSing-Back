@@ -55,21 +55,18 @@ class LoginSerializer(serializers.Serializer):
                 return data
         else: 
             raise serializers.ValidationError('존재하지 않는 사용자입니다.')
-'''
+
 class NicknameUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','nickname']
 '''
-
-class NicknameUpdateSerializer(serializers.Serializer):
-    new_nickname = serializers.CharField(max_lenth=10)
-    
     def validate_nickname(self, value):
         existing_user = User.objects.filter(nickname__iexact=value).first()
         if existing_user:
             raise serializers.ValidationError('이미 사용 중인 닉네임입니다.')
         return value
+'''
 
 class PasswordUpdateSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length=128, write_only=True)
