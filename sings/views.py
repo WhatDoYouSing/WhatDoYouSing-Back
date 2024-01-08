@@ -29,7 +29,7 @@ class HomeCommentsView(views.APIView):
 
         data = {
             'Likes': most_likes_seri.data,
-            'LankingComments': top_comments_seri.data,
+            'LankingList': top_comments_seri.data,
         }
 
         return Response({'message': '홈 댓글순 조회 성공', 'data': data}, status=status.HTTP_200_OK) 
@@ -48,7 +48,7 @@ class HomeLatestView(views.APIView):
 
         data = {
             'Likes': most_likes_seri.data,
-            'LankingLatest': top_latest_seri.data,
+            'LankingList': top_latest_seri.data,
         }
 
         return Response({'message': '홈 최신순 조회 성공', 'data': data}, status=status.HTTP_200_OK)
@@ -67,7 +67,7 @@ class HomeLikesView(views.APIView):
 
         data = {
             'Likes': most_likes_seri.data,
-            'LankingLikes': top_likes_seri.data,
+            'LankingList': top_likes_seri.data,
         }
 
         return Response({'message': '홈 좋아요순 조회 성공', 'data': data}, status=status.HTTP_200_OK)
