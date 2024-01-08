@@ -81,10 +81,9 @@ class NicknameUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','nickname']
-        
+
 class PasswordUpdateSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length=128, write_only=True)
-
 
 class UserConfirmSerializer(serializers.Serializer):
     enter_password = serializers.CharField(max_length=128, write_only=True)
