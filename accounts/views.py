@@ -91,7 +91,7 @@ class ChangePasswordView(views.APIView):
     serializer_class = PasswordUpdateSerializer
 
     def patch(self, request, format=None):
-        serializer = PasswordUpdateSerializer(request.user, data=request.data)
+        serializer = PasswordUpdateSerializer(data=request.data)
         
         if serializer.is_valid():
             user = request.user
@@ -125,7 +125,7 @@ class UserDeleteView(views.APIView):
     serializer_class=UserConfirmSerializer
 
     def post(self, request):
-        serializer = UserConfirmSerializer(data=request.data)
+        serializer = UserConfirmSerializer(user = request.user, data=request.data)
 
         if serializer.is_valid():
             user = request.user
@@ -134,7 +134,6 @@ class UserDeleteView(views.APIView):
             if not user.check_password(enter_password):
                 return Response({'message': '접근 실패, 비밀번호가 옳지 않습니다.', 'access':False}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                #user = request.user
                 user.delete()
                 return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.', 'access':True}, status=status.HTTP_200_OK)
     
