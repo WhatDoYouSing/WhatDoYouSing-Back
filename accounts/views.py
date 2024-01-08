@@ -55,7 +55,15 @@ class ProfileChoiceView(views.APIView):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
 
-    def post(self, request, format=None):
+    def patch(self, request, format=None):
+        serializer = ProfileChoiceSerializer(request.user, data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': '프로필 변경 성공.', 'data': serializer.validated_data}, status=status.HTTP_200_OK)
+        return Response({'message': '프로필 변경 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        '''
         user = request.user
         serializer = self.serializer_class(user, data=request.data, partial=True)
         user.set_profile()
@@ -63,6 +71,20 @@ class ProfileChoiceView(views.APIView):
             serializer.save()
             return Response({'message': '프로필 지정 성공.', 'data': serializer.data}, status=status.HTTP_200_OK)
         return Response({'message': '프로필 지정 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        '''
+    '''
+    def get(self, request, format=None):
+        serializer = self.serializer_class(request.user)
+        return Response(serializer.data)
+
+    def patch(self, request, format=None):
+        serializer = NicknameUpdateSerializer(request.user, data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': '닉네임 변경 성공.', 'data': serializer.validated_data}, status=status.HTTP_200_OK)
+        return Response({'message': '닉네임 변경 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    '''
     
 class LoginView(views.APIView):
     serializer_class = LoginSerializer
