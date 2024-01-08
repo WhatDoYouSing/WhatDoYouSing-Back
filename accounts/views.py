@@ -113,7 +113,7 @@ class ChangeNicknameView(views.APIView):
         return Response(serializer.data)
 
     def patch(self, request, format=None):
-        serializer = NicknameUpdateSerializer(request.user, data=request.data, partial=True)
+        serializer = NicknameUpdateSerializer(request.user, data=request.data)
         
         if serializer.is_valid():
             serializer.save()

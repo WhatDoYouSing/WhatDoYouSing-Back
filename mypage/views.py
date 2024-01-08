@@ -27,10 +27,7 @@ class ProfileView(views.APIView):
 
     def get(self, request, format=None):
         serializer = self.serializer_class(request.user) 
-        
-        if serializer.is_valid():
-            return Response({'message': '마이페이지 조회 성공', 'data': serializer.validated_data}, status=status.HTTP_200_OK)
-        return Response({'message': '프로필 지정 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': '마이페이지 조회 성공', 'data': serializer.data}, status=status.HTTP_200_OK)
 
 class MypagePagination(PageNumberPagination):
     page_size = 15
