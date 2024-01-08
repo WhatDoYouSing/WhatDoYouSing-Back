@@ -60,13 +60,6 @@ class NicknameUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','nickname']
-'''
-    def validate_nickname(self, value):
-        existing_user = User.objects.filter(nickname__iexact=value).first()
-        if existing_user:
-            raise serializers.ValidationError('이미 사용 중인 닉네임입니다.')
-        return value
-'''
 
 class PasswordUpdateSerializer(serializers.Serializer):
     new_password = serializers.CharField(max_length=128, write_only=True)
