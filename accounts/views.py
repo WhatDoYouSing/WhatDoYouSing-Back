@@ -107,11 +107,10 @@ class ChangePasswordView(views.APIView):
 
 class ChangeNicknameView(views.APIView):
     serializer_class = NicknameUpdateSerializer
-    '''
+    
     def get(self, request, format=None):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
-    '''
 
     def patch(self, request, format=None):
         serializer = NicknameUpdateSerializer(request.user, data=request.data, partial=True)
