@@ -48,7 +48,7 @@ class LoginSerializer(serializers.Serializer):
                     'id': user.id,
                     'username':user.username,
                     'nickname': user.nickname ,
-                    'profile_num':user.profile,
+                    'profile':user.profile,
                     'access_token': access
                 }
 
