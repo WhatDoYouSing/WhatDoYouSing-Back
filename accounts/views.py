@@ -29,7 +29,7 @@ BASE_URL = 'http://whatdoyousing.com/'
 
 KAKAO_CONFIG = {
     "KAKAO_REST_API_KEY":getattr(WhatDoYouSing.settings.base, 'KAKAO_CLIENT_ID', None),
-    "KAKAO_REDIRECT_URI": f"http://127.0.0.1:8000/accounts/kakao/callback/",
+    "KAKAO_REDIRECT_URI": f"http://whatdoyousing.com/accounts/kakao/callback/",
     "KAKAO_CLIENT_SECRET_KEY": getattr(WhatDoYouSing.settings.base, 'KAKAO_CLIENT_SECRET_KEY', None), 
     "KAKAO_PW":getattr(WhatDoYouSing.settings.base, 'KAKAO_PW', None),
 }
@@ -104,31 +104,14 @@ class ChangePasswordView(views.APIView):
         else:
             return Response({'message': '올바르지 않은 데이터입니다.'}, status=status.HTTP_400_BAD_REQUEST)
         
-'''       
-class ChangeNicknameView(views.APIView):
-    serializer_class = NicknameUpdateSerializer
-    
-    def get(self, request, format=None):
-        serializer = self.serializer_class(request.user)
-        return Response(serializer.data)
-
-    
-    def patch(self, request, format=None):
-        user = request.user
-        serializer = self.serializer_class(user, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': '닉네임 변경 성공.', 'data': serializer.data}, status=status.HTTP_200_OK)
-        return Response({'message': '닉네임 변경 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-'''
 
 class ChangeNicknameView(views.APIView):
     serializer_class = NicknameUpdateSerializer
-
+    '''
     def get(self, request, format=None):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
+    '''
 
     def patch(self, request, format=None):
         serializer = NicknameUpdateSerializer(request.user, data=request.data, partial=True)
@@ -176,9 +159,6 @@ class KakaoLoginView(views.APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-        '''
-        kakao code 요청
-        '''
         client_id = KAKAO_CONFIG['KAKAO_REST_API_KEY']
         redirect_uri = KAKAO_CONFIG['KAKAO_REDIRECT_URI']
 
@@ -231,10 +211,9 @@ class KakaoCallbackView(views.APIView):
         social_type = 'kakao'
         social_id = f"{social_type}_{user_info_json.get('id')}"
 
-        properties = user_info_json.get('properties',{})
+        properties = user_info_json.get('properties')
         nickname=properties.get('nickname','')
         profile=properties.get('thumbnail_image_url','')
-        conf_pw=properties.get('confirm_password','')
         print(user_info_json)
 
         # 회원가입 및 로그인 처리 
