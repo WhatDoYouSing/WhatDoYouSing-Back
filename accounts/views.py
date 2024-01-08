@@ -107,7 +107,7 @@ class ChangePasswordView(views.APIView):
 
 class ChangeNicknameView(views.APIView):
     serializer_class = NicknameUpdateSerializer
-    
+
     def get(self, request, format=None):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data)
@@ -117,7 +117,7 @@ class ChangeNicknameView(views.APIView):
         
         if serializer.is_valid():
             serializer.save()
-            return Response({'message': '닉네임 변경 성공.', 'data': serializer.data}, status=status.HTTP_200_OK)
+            return Response({'message': '닉네임 변경 성공.', 'data': serializer.validated_data}, status=status.HTTP_200_OK)
         return Response({'message': '닉네임 변경 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserDeleteView(views.APIView):
