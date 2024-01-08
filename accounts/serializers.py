@@ -2,7 +2,28 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import *
 
+#자체회원가입용
 class SignUpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id','username','password','nickname','profile']
+
+    def create(self, validated_data):
+        user = User.objects.create(
+            username = validated_data['username'],
+            password = validated_data['password'],
+            nickname = validated_data['nickname'],
+            profile = validated_data['profile']
+        )
+
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user
+
+#카카오 회원가입용    
+class KSignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
