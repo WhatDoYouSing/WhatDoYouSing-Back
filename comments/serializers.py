@@ -38,6 +38,8 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
     relikes_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
+    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
+
 
     class Meta:
         model = Recomment
