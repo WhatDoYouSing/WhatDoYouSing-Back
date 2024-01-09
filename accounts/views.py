@@ -95,7 +95,12 @@ class ChangePasswordView(views.APIView):
         
         if serializer.is_valid():
             user = request.user
+            current_password = serializer.validated_data['current_password']
             new_password = serializer.validated_data['new_password']
+
+            # 현재 비밀번호 확인
+            if not user.check_password(current_password):
+                return Response({'message': '현재 비밀번호가 옳지 않습니다.'}, status=HTTP_400_BAD_REQUEST)
 
             # 새로운 비밀번호 설정
             user.set_password(new_password)
@@ -120,24 +125,6 @@ class ChangeNicknameView(views.APIView):
             serializer.save()
             return Response({'message': '닉네임 변경 성공.', 'data': serializer.validated_data}, status=status.HTTP_200_OK)
         return Response({'message': '닉네임 변경 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
-'''        
-class UserDeleteView(views.APIView):
-    serializer_class=UserConfirmSerializer
-
-    def post(self, request):
-        serializer = UserConfirmSerializer(user = request.user, data=request.data)
-
-        if serializer.is_valid():
-            user = request.user
-            enter_password = serializer.validated_data['enter_password']
-
-            if not user.check_password(enter_password):
-                return Response({'message': '접근 실패, 비밀번호가 옳지 않습니다.', 'access':False}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                user.delete()
-                return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.', 'access':True}, status=status.HTTP_200_OK)
-'''
 
 class UserDeleteView(generics.DestroyAPIView):
     serializer_class = UserDeleteSerializer
@@ -197,7 +184,6 @@ class UserAccessView(generics.RetrieveAPIView):
         }
 
         return Response({'message': '접근 성공', 'data': user_data}, status=status.HTTP_200_OK)
-
 
 #카카오
 class KakaoLoginView(views.APIView):

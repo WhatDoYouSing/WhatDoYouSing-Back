@@ -83,6 +83,7 @@ class NicknameUpdateSerializer(serializers.ModelSerializer):
         fields = ['id','nickname']
 
 class PasswordUpdateSerializer(serializers.Serializer):
+    current_password = serializers.CharField(max_length=128, write_only=True)
     new_password = serializers.CharField(max_length=128, write_only=True)
 
 class UserAccessSerializer(serializers.Serializer):
