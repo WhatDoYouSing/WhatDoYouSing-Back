@@ -58,3 +58,8 @@ class EmotionSerializer(serializers.ModelSerializer):
     class Meta:
         model=Emotion
         fields=['emo_id','content','emo_post','emo_user']
+
+class EmotionChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Emotion
+        fields = ['emo_user','content']
