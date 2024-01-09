@@ -133,19 +133,17 @@ class SearchLikesView(views.APIView, PaginationHandlerMixin):
         if emo:
             posts = posts.filter(Q(sings_emotion__iexact=str(emo)))
         
-        if keyword:
-            posts_likes = posts.order_by('-likes_count')
+        
+        posts_likes = posts.order_by('-likes_count')
 
-            total = posts_likes.__len__()
-            total_page = math.ceil(total/15)
-            posts_likes = self.paginate_queryset(posts_likes)
+        total = posts_likes.__len__()
+        total_page = math.ceil(total/15)
+        posts_likes = self.paginate_queryset(posts_likes)
 
-            posts_likes_seri = SearchSerializer(posts_likes, many=True)
+        posts_likes_seri = SearchSerializer(posts_likes, many=True)
 
-            return Response({'message':'좋아요순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-     
+        return Response({'message':'좋아요순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
+        
 
 #가사 검색 댓글순 정렬
 class SearchCommentsView(views.APIView, PaginationHandlerMixin):
@@ -163,20 +161,18 @@ class SearchCommentsView(views.APIView, PaginationHandlerMixin):
         if emo:
             posts = posts.filter(Q(sings_emotion__iexact=str(emo)))
         
-        if keyword:
-            posts_comments =  posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
         
-            total = posts_comments.__len__()
-            total_page = math.ceil(total/15)
-            posts_comments = self.paginate_queryset(posts_comments)
+        posts_comments =  posts.annotate(comments_count=Count('comment')+Count('comments')).order_by('-comments_count')
+        
+        total = posts_comments.__len__()
+        total_page = math.ceil(total/15)
+        posts_comments = self.paginate_queryset(posts_comments)
 
-            posts_comments_seri = SearchSerializer(posts_comments, many=True)
+        posts_comments_seri = SearchSerializer(posts_comments, many=True)
 
-            return Response({'message':'댓글순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-
-      
+        return Response({'message':'댓글순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
+        
+'''
 #감정태그 최신순 정렬
 class SearchEmoLatestView(views.APIView, PaginationHandlerMixin):
     pagination_class = BoothPagination
@@ -232,4 +228,4 @@ class SearchEmoCommentsView(views.APIView, PaginationHandlerMixin):
         posts_comments_seri = SearchSerializer(posts_comments, many=True)
         
         return Response({'message': '감정태그 댓글순 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
-        
+'''             
