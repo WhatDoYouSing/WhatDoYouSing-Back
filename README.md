@@ -2,11 +2,11 @@
 
 ## 🎶 프로젝트 소개 
 <p align="center">
- <img src="https://github.com/JiwonChoi0805/Ewha-Market/assets/126451052/6a6a6599-6fb0-4fba-8815-35df0aeba1c7" width="80"/>
+ <img src="https://github.com/WhatDoYouSing/WhatDoYouSing-Front/assets/55123397/7c19327e-abf0-4976-8264-54de0aa435cc"/>
 </p>
 <br/>
 이화여대 멋쟁이 사자처럼 11기 졸업 프로젝트 3팀 서비스 '왓두유씽?'입니다.
-<br/>
+<br/><br/>
 
 ## 💻 개발 기간
 2023.11.02~ 기획디자인
