@@ -7,7 +7,7 @@ from .serializers import *
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from operator import attrgetter
-from rest_framework import status, generics
+from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from .pagination import PaginationHandlerMixin
 
@@ -118,7 +118,7 @@ class CommentsCollectView(views.APIView, PaginationHandlerMixin):
 
         return Response(Cdata)
 
-'''
+
 class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
     pagination_class = MypagePagination
 
@@ -153,28 +153,3 @@ class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
         }
 
         return Response(response_data)
-'''
-
-class EmotionsCollectView(generics.ListAPIView, PaginationHandlerMixin):
-    serializer_class = EmotionSerializer
-    pagination_class = MypagePagination
-
-    def get_queryset(self):
-        emotion_content = self.request.query_params.get('emotion_content', None)
-        queryset = Emotion.objects.filter(emo_user=self.request.user)
-
-        if emotion_content:
-            queryset = queryset.filter(content=emotion_content)
-
-        return queryset
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
