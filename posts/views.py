@@ -21,7 +21,7 @@ class PostListView(views.APIView):
         except Post.DoesNotExist:
             return Response({"message": "가사가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.serializer_class(post)
+        serializer = self.serializer_class(post, context={'request':request})
         return Response({"message": "가사 조회 성공", "data": serializer.data}, status=status.HTTP_200_OK)
 
     # def get(self, request, pk, format=None):
@@ -244,7 +244,8 @@ class EmotionDelView(views.APIView):
         # emo=Emotion.objects.filter(emo_post=post_pk,emo_user=now_user.id,content=content)
         # emo.delete()
         # return Response({"message": "투표감정 삭제 성공"})
-      
+
+##임의로 넣었으니 무시하셔도 됩니다...      
 class EmotionFunctionsView(views.APIView):
     def get(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
