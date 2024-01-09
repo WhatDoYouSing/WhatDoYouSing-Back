@@ -100,29 +100,6 @@ class PostLikeView(views.APIView):
 
 class EmotionView(views.APIView):
 
-    def post(self, request, post_pk):
-        post = get_object_or_404(Post, id=post_pk)
-        content=request.data['content']
-        now_user=request.user
-
-        # 해당 사용자와 포스트에 대한 감정 객체 확인
-        existing_emotion = Emotion.objects.filter(emo_post=post_pk, emo_user=now_user)
-        
-        # 이미 존재하는 경우 오류 응답
-        if existing_emotion.exists():
-            return Response({"message": "이미 투표한 감정이 존재합니다."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        emotion=EmotionSerializer(data={
-            'content':content,
-            'emo_post':post.id,
-            'emo_user':now_user.id
-        }) 
-        if emotion.is_valid():
-            emotion.save()
-            return Response({"message": "투표감정 등록 성공","data":emotion.data}, status=status.HTTP_200_OK)
-        else:
-            return Response({"message": "투표감정 등록 실패","error":emotion.errors},status=status.HTTP_400_BAD_REQUEST)
-        
     def get(self, request, post_pk):
         post = get_object_or_404(Post, id=post_pk)
         emotions=Emotion.objects.filter(emo_post=post).all()
@@ -213,6 +190,34 @@ class EmotionView(views.APIView):
 
         return Response({'message': "투표감정 조회 성공", "data": data}, status=status.HTTP_200_OK)
     
+
+class EmotionAddView(views.APIView):
+
+    def post(self, request, post_pk):
+        post = get_object_or_404(Post, id=post_pk)
+        content=request.data['content']
+        now_user=request.user
+
+        # 해당 사용자와 포스트에 대한 감정 객체 확인
+        existing_emotion = Emotion.objects.filter(emo_post=post_pk, emo_user=now_user)
+        
+        # 이미 존재하는 경우 오류 응답
+        if existing_emotion.exists():
+            return Response({"message": "이미 투표한 감정이 존재합니다."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        emotion=EmotionSerializer(data={
+            'content':content,
+            'emo_post':post.id,
+            'emo_user':now_user.id
+        }) 
+        if emotion.is_valid():
+            emotion.save()
+            return Response({"message": "투표감정 등록 성공","data":emotion.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "투표감정 등록 실패","error":emotion.errors},status=status.HTTP_400_BAD_REQUEST)
+        
+class EmotionDelView(views.APIView):
+   
     def delete(self, request, post_pk):
         now_user = request.user
         #content = request.data.get('content')

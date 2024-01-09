@@ -11,4 +11,6 @@ urlpatterns = [
     path("<int:pk>/likes/", PostLikeView.as_view()),
     path("scrap/<int:pk>/", PostScrapView.as_view()),
     path("<int:post_pk>/emotions/", EmotionView.as_view()),
+    path("<int:post_pk>/emotions/add/", EmotionAddView.as_view()),
+    path("<int:post_pk>/emotions/del/", EmotionDelView.as_view()),
 ]
