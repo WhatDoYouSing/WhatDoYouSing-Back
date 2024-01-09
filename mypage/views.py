@@ -61,7 +61,6 @@ class ScrapsCollectView(views.APIView, PaginationHandlerMixin):
         }
 
         return Response(response_data)
-    
 
 class PostsCollectView(views.APIView, PaginationHandlerMixin):
     pagination_class = MypagePagination
@@ -86,7 +85,6 @@ class PostsCollectView(views.APIView, PaginationHandlerMixin):
         }
 
         return Response(response_data)
-  
 
 class CommentsCollectView(views.APIView, PaginationHandlerMixin):
     pagination_class = MypagePagination
@@ -123,7 +121,6 @@ class CommentsCollectView(views.APIView, PaginationHandlerMixin):
         }
 
         return Response(Cdata)
-
 
 class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
     pagination_class = MypagePagination
