@@ -102,93 +102,107 @@ class EmotionView(views.APIView):
 
     def get(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
-        emotions=Emotion.objects.filter(emo_post=post).all()
-        is_my_1, is_my_2, is_my_3, is_my_4, is_my_5, is_my_6, is_my_7, is_my_8, is_my_9, is_my_10, is_my_11, is_my_12 = [False] * 12
-
-        emotion1s=emotions.filter(content=1).all()
-        emotion1count=emotion1s.count()
-        for emotion in emotion1s:
-            if emotion.emo_user==request.user : is_my_1=True
-
-        emotion2s=emotions.filter(content=2).all()
-        emotion2count=emotion2s.count()
-        for emotion in emotion2s:
-            if emotion.emo_user==request.user : is_my_2=True
-
-        emotion3s=emotions.filter(content=3).all()
-        emotion3count=emotion3s.count()
-        for emotion in emotion3s:
-            if emotion.emo_user==request.user : is_my_3=True
-
-        emotion4s=emotions.filter(content=4).all()
-        emotion4count=emotion4s.count()
-        for emotion in emotion4s:
-            if emotion.emo_user==request.user : is_my_4=True
-
-        emotion5s=emotions.filter(content=5).all()
-        emotion5count=emotion5s.count()
-        for emotion in emotion5s:
-            if emotion.emo_user==request.user : is_my_5=True
-
-        emotion6s=emotions.filter(content=6).all()
-        emotion6count=emotion6s.count()
-        for emotion in emotion6s:
-            if emotion.emo_user==request.user : is_my_6=True
-
-        emotion7s = emotions.filter(content=7).all()
-        emotion7count = emotion7s.count()
-        for emotion in emotion7s:
-            if emotion.emo_user == request.user : is_my_7 = True
-
-        emotion8s = emotions.filter(content=8).all()
-        emotion8count = emotion8s.count()
-        for emotion in emotion8s:
-            if emotion.emo_user == request.user : is_my_8 = True
-
-        emotion9s = emotions.filter(content=9).all()
-        emotion9count = emotion9s.count()
-        for emotion in emotion9s:
-            if emotion.emo_user == request.user : is_my_9 = True
-
-        emotion10s = emotions.filter(content=10).all()
-        emotion10count = emotion10s.count()
-        for emotion in emotion10s:
-            if emotion.emo_user == request.user : is_my_10 = True
-
-        emotion11s = emotions.filter(content=11).all()
-        emotion11count = emotion11s.count()
-        for emotion in emotion11s:
-            if emotion.emo_user == request.user : is_my_11 = True
-
-        emotion12s = emotions.filter(content=12).all()
-        emotion12count = emotion12s.count()
-        for emotion in emotion12s:
-            if emotion.emo_user == request.user : is_my_12 = True
-        
+        emotions = Emotion.objects.filter(emo_post=post).values('content').annotate(num=Count('content'))
         data = {
-                'post_id': pk,
-                'content': post.lyrics,
-                'Emotion': [
-                    {'content': 1, 'num': emotion1count, 'is_my': is_my_1},
-                    {'content': 2, 'num': emotion2count, 'is_my': is_my_2},
-                    {'content': 3, 'num': emotion3count, 'is_my': is_my_3},
-                    {'content': 4, 'num': emotion4count, 'is_my': is_my_4},
-                    {'content': 5, 'num': emotion5count, 'is_my': is_my_5},
-                    {'content': 6, 'num': emotion6count, 'is_my': is_my_6},
-                    {'content': 7, 'num': emotion7count, 'is_my': is_my_7},
-                    {'content': 8, 'num': emotion8count, 'is_my': is_my_8},
-                    {'content': 9, 'num': emotion9count, 'is_my': is_my_9},
-                    {'content': 10, 'num': emotion10count, 'is_my': is_my_10},
-                    {'content': 11, 'num': emotion11count, 'is_my': is_my_11},
-                    {'content': 12, 'num': emotion12count, 'is_my': is_my_12},
-                ],
-            }
+            'post_id': pk,
+            #'content': post.lyrics,
+            'Emotion': [
+                {'content': emotion['content'], 'num': emotion['num']} for emotion in emotions
+            ]
+        }
 
-        if not any([is_my_1, is_my_2, is_my_3, is_my_4, is_my_5, is_my_6,
-            is_my_7, is_my_8, is_my_9, is_my_10, is_my_11, is_my_12]):
+        if not emotions:
             return Response({'message': "투표감정 조회 실패"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'message': "투표감정 조회 성공", "data": data}, status=status.HTTP_200_OK)
+        # post = get_object_or_404(Post, pk=pk)
+        # emotions=Emotion.objects.filter(emo_post=post).all()
+        # is_my_1, is_my_2, is_my_3, is_my_4, is_my_5, is_my_6, is_my_7, is_my_8, is_my_9, is_my_10, is_my_11, is_my_12 = [False] * 12
+
+        # emotion1s=emotions.filter(content=1).all()
+        # emotion1count=emotion1s.count()
+        # for emotion in emotion1s:
+        #     if emotion.emo_user==request.user : is_my_1=True
+
+        # emotion2s=emotions.filter(content=2).all()
+        # emotion2count=emotion2s.count()
+        # for emotion in emotion2s:
+        #     if emotion.emo_user==request.user : is_my_2=True
+
+        # emotion3s=emotions.filter(content=3).all()
+        # emotion3count=emotion3s.count()
+        # for emotion in emotion3s:
+        #     if emotion.emo_user==request.user : is_my_3=True
+
+        # emotion4s=emotions.filter(content=4).all()
+        # emotion4count=emotion4s.count()
+        # for emotion in emotion4s:
+        #     if emotion.emo_user==request.user : is_my_4=True
+
+        # emotion5s=emotions.filter(content=5).all()
+        # emotion5count=emotion5s.count()
+        # for emotion in emotion5s:
+        #     if emotion.emo_user==request.user : is_my_5=True
+
+        # emotion6s=emotions.filter(content=6).all()
+        # emotion6count=emotion6s.count()
+        # for emotion in emotion6s:
+        #     if emotion.emo_user==request.user : is_my_6=True
+
+        # emotion7s = emotions.filter(content=7).all()
+        # emotion7count = emotion7s.count()
+        # for emotion in emotion7s:
+        #     if emotion.emo_user == request.user : is_my_7 = True
+
+        # emotion8s = emotions.filter(content=8).all()
+        # emotion8count = emotion8s.count()
+        # for emotion in emotion8s:
+        #     if emotion.emo_user == request.user : is_my_8 = True
+
+        # emotion9s = emotions.filter(content=9).all()
+        # emotion9count = emotion9s.count()
+        # for emotion in emotion9s:
+        #     if emotion.emo_user == request.user : is_my_9 = True
+
+        # emotion10s = emotions.filter(content=10).all()
+        # emotion10count = emotion10s.count()
+        # for emotion in emotion10s:
+        #     if emotion.emo_user == request.user : is_my_10 = True
+
+        # emotion11s = emotions.filter(content=11).all()
+        # emotion11count = emotion11s.count()
+        # for emotion in emotion11s:
+        #     if emotion.emo_user == request.user : is_my_11 = True
+
+        # emotion12s = emotions.filter(content=12).all()
+        # emotion12count = emotion12s.count()
+        # for emotion in emotion12s:
+        #     if emotion.emo_user == request.user : is_my_12 = True
+        
+        # data = {
+        #         'post_id': pk,
+        #         'content': post.lyrics,
+        #         'Emotion': [
+        #             {'content': 1, 'num': emotion1count, 'is_my': is_my_1},
+        #             {'content': 2, 'num': emotion2count, 'is_my': is_my_2},
+        #             {'content': 3, 'num': emotion3count, 'is_my': is_my_3},
+        #             {'content': 4, 'num': emotion4count, 'is_my': is_my_4},
+        #             {'content': 5, 'num': emotion5count, 'is_my': is_my_5},
+        #             {'content': 6, 'num': emotion6count, 'is_my': is_my_6},
+        #             {'content': 7, 'num': emotion7count, 'is_my': is_my_7},
+        #             {'content': 8, 'num': emotion8count, 'is_my': is_my_8},
+        #             {'content': 9, 'num': emotion9count, 'is_my': is_my_9},
+        #             {'content': 10, 'num': emotion10count, 'is_my': is_my_10},
+        #             {'content': 11, 'num': emotion11count, 'is_my': is_my_11},
+        #             {'content': 12, 'num': emotion12count, 'is_my': is_my_12},
+        #         ],
+        #     }
+
+        # if not any([is_my_1, is_my_2, is_my_3, is_my_4, is_my_5, is_my_6,
+        #     is_my_7, is_my_8, is_my_9, is_my_10, is_my_11, is_my_12]):
+        #     return Response({'message': "투표감정 조회 실패"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # return Response({'message': "투표감정 조회 성공", "data": data}, status=status.HTTP_200_OK)
     
 
 class EmotionAddView(views.APIView):
