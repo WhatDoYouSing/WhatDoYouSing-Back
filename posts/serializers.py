@@ -38,7 +38,6 @@ class PostSerializer(FunctionMixin, serializers.ModelSerializer):
     #comment_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
-    #is_scraped = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -55,16 +54,11 @@ class PostSerializer(FunctionMixin, serializers.ModelSerializer):
             "sings_emotion",
             "likes_count",
             "scrap",
-            "is_scraped",
             "created_at",
         ]
 
         read_only_fields = ["author"]
-
-        #def get_is_scraped(self, obj):
-        #    user = self.context['request'].user
-        #    return user in obj.scrap.all()
-
+        
 class EmotionSerializer(serializers.ModelSerializer):
     class Meta:
         model=Emotion
