@@ -100,8 +100,8 @@ class PostLikeView(views.APIView):
 
 class EmotionView(views.APIView):
 
-    def get(self, request, post_pk):
-        post = get_object_or_404(Post, id=post_pk)
+    def get(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
         emotions=Emotion.objects.filter(emo_post=post).all()
         is_my_1, is_my_2, is_my_3, is_my_4, is_my_5, is_my_6, is_my_7, is_my_8, is_my_9, is_my_10, is_my_11, is_my_12 = [False] * 12
 
@@ -166,7 +166,7 @@ class EmotionView(views.APIView):
             if emotion.emo_user == request.user : is_my_12 = True
         
         data = {
-                'post_id': post_pk,
+                'post_id': pk,
                 'content': post.lyrics,
                 'Emotion': [
                     {'content': 1, 'num': emotion1count, 'is_my': is_my_1},
@@ -193,13 +193,13 @@ class EmotionView(views.APIView):
 
 class EmotionAddView(views.APIView):
 
-    def post(self, request, post_pk):
-        post = get_object_or_404(Post, id=post_pk)
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
         content=request.data['content']
         now_user=request.user
 
         # 해당 사용자와 포스트에 대한 감정 객체 확인
-        existing_emotion = Emotion.objects.filter(emo_post=post_pk, emo_user=now_user)
+        existing_emotion = Emotion.objects.filter(emo_post=pk, emo_user=now_user)
         
         # 이미 존재하는 경우 오류 응답
         if existing_emotion.exists():
@@ -218,12 +218,12 @@ class EmotionAddView(views.APIView):
         
 class EmotionDelView(views.APIView):
    
-    def delete(self, request, post_pk):
+    def delete(self, request, pk):
         now_user = request.user
         #content = request.data.get('content')
 
         try:
-            emotion_to_delete = Emotion.objects.get(emo_post=post_pk, emo_user=now_user)
+            emotion_to_delete = Emotion.objects.get(emo_post=pk, emo_user=now_user)
             emotion_to_delete.delete()  # 해당 Emotion 삭제
             return Response({"message": "투표감정 삭제 성공"}, status=status.HTTP_200_OK)
         except Emotion.DoesNotExist:
