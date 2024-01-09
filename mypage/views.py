@@ -166,11 +166,9 @@ class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
         posts = Post.objects.all()
 
         if emo:
-            posts = posts.filter(Q(sings_emotion__iexact=str(emo)))
-            posts_latest = posts.order_by('-created_at')
+            posts_filtered = posts.filter(Q(sings_emotion__iexact=str(emo)))
+            posts_latest = posts_filtered.order_by('-created_at')
             posts_latest = self.paginate_queryset(posts_latest)
-
-            #posts_latest_seri = EmotionsFilterSerializer(posts_latest, many=True)
 
             total_emotions = Emotion.objects.filter(emo_user=request.user).count()
             total_pages = self.paginator.page.paginator.num_pages if self.paginator else 0
