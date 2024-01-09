@@ -32,7 +32,7 @@ class KSignUpSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create(
             username = validated_data['username'],
-            password = validated_data['password'],
+            #password = validated_data['password'],
             nickname = validated_data['nickname'],
         )
 
