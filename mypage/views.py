@@ -17,6 +17,7 @@ from comments.models import *
 from comments.serializers import *
 
 from posts.models import Emotion
+from django.db.models import Q
 # Create your views here.
 
 class ProfileView(views.APIView):
