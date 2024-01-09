@@ -85,6 +85,8 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
 class MypageCommentSerializer(FunctionMixin, serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
+    author_profile = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Comment
@@ -93,6 +95,7 @@ class MypageCommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "post",
             "author",
             "author_nickname",
+            "author_profile",
             "com_content",
             "com_likes",
             "likes_count",
