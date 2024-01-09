@@ -38,9 +38,14 @@ class ScrapsCollectView(views.APIView, PaginationHandlerMixin):
 
     def get(self,request):
         page_number = self.request.query_params.get('page', 1)
+        keyword= request.GET.get('keyword')
 
         user = request.user
         myScraps = Post.objects.filter(scrap=user).order_by('-created_at')
+        
+        if keyword:
+            myScraps = myScraps.filter(Q(lyrics__icontains=keyword))
+
         myScraps = self.paginate_queryset(myScraps)
         myScraps_serializers = [PostSerializer(post).data for post in myScraps]
 
