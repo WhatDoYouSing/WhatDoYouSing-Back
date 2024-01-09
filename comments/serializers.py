@@ -70,7 +70,7 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "post",
             "author",
             "author_nickname",
-            "author_nickname",
+            "author_profile",
             "com_content",
             "com_likes",
             "likes_count",
