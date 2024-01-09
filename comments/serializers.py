@@ -9,6 +9,9 @@ class FunctionMixin:
     def get_author_nickname(self, obj):
         return obj.author.nickname
     
+    def get_author_profile(self,obj):
+        return obj.author.profile
+    
     def get_comment_count(self, obj):
         return obj.comment.count() 
     
@@ -34,6 +37,7 @@ class FunctionMixin:
 class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
     relikes_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
+    author_profile = serializers.SerializerMethodField()
 
     class Meta:
         model = Recomment
@@ -42,6 +46,7 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "post",
             "author",
             "author_nickname",
+            "author_profile",
             "com_content",
             "com_relikes",
             "relikes_count",
@@ -55,6 +60,7 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
     recomments = RecommentSerializer(many=True, read_only=True)
     recomments_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
+    author_profile = serializers.SerializerMethodField()
     com_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -63,6 +69,7 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "comment_id",
             "post",
             "author",
+            "author_nickname",
             "author_nickname",
             "com_content",
             "com_likes",
