@@ -112,7 +112,7 @@ class EmotionView(views.APIView):
         }
 
         if not emotions:
-            return Response({'message': "투표감정 조회 실패"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': "투표감정 조회 실패"}, status=status.HTTP_200_OK)
 
         return Response({'message': "투표감정 조회 성공", "data": data}, status=status.HTTP_200_OK)
         # post = get_object_or_404(Post, pk=pk)
