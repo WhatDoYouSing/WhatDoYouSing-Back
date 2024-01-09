@@ -97,10 +97,6 @@ class SearchLatestView(views.APIView, PaginationHandlerMixin):
         emo = request.GET.get('emo')
         
         posts = Post.objects.all()
-
-        if not keyword or keyword.lower() == 'abcdefg':
-            return Response({'error': '올바른 검색어를 제공해야 합니다.'}, status=status.HTTP_400_BAD_REQUEST)
-
          
         if keyword:
             posts = posts.filter(Q(lyrics__icontains=keyword))
