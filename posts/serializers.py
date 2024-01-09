@@ -38,7 +38,7 @@ class PostSerializer(FunctionMixin, serializers.ModelSerializer):
     #comment_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
-    is_scraped = serializers.BooleanField(source='scrap.filter(pk=user.id).exists()', read_only=True)
+    is_scraped = serializers.BooleanField(source='scrap.filter(pk=context["user"].id).exists()', read_only=True)
 
     class Meta:
         model = Post
