@@ -114,7 +114,7 @@ class SearchLatestView(views.APIView, PaginationHandlerMixin):
 
         posts_latest_seri = SearchSerializer(posts_latest, many=True)
 
-        return Response({'message':'최신순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
+        return Response({'message':'최신순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': posts_latest_seri.data}, status=status.HTTP_200_OK)
             
 
 #가사 검색 좋아요순 정렬
@@ -142,7 +142,7 @@ class SearchLikesView(views.APIView, PaginationHandlerMixin):
 
         posts_likes_seri = SearchSerializer(posts_likes, many=True)
 
-        return Response({'message':'좋아요순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_likes_seri.data}}, status=status.HTTP_200_OK)
+        return Response({'message':'좋아요순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': posts_likes_seri.data}, status=status.HTTP_200_OK)
         
 
 #가사 검색 댓글순 정렬
@@ -170,7 +170,7 @@ class SearchCommentsView(views.APIView, PaginationHandlerMixin):
 
         posts_comments_seri = SearchSerializer(posts_comments, many=True)
 
-        return Response({'message':'댓글순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_comments_seri.data}}, status=status.HTTP_200_OK)
+        return Response({'message':'댓글순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': posts_comments_seri.data}, status=status.HTTP_200_OK)
         
 '''
 #감정태그 최신순 정렬
