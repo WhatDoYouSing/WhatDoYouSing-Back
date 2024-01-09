@@ -38,6 +38,7 @@ class PostSerializer(FunctionMixin, serializers.ModelSerializer):
     #comment_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
+    is_scraped = serializers.BooleanField(source='scrap.filter(pk=user.id).exists()', read_only=True)
 
     class Meta:
         model = Post
@@ -54,11 +55,12 @@ class PostSerializer(FunctionMixin, serializers.ModelSerializer):
             "sings_emotion",
             "likes_count",
             "scrap",
+            "is_scraped",
             "created_at",
         ]
 
         read_only_fields = ["author"]
-        
+
 class EmotionSerializer(serializers.ModelSerializer):
     class Meta:
         model=Emotion
