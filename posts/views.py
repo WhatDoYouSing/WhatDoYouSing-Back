@@ -21,7 +21,7 @@ class PostListView(views.APIView):
         except Post.DoesNotExist:
             return Response({"message": "가사가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.serializer_class(post, context={'request':request})
+        serializer = self.serializer_class(post)
         return Response({"message": "가사 조회 성공", "data": serializer.data}, status=status.HTTP_200_OK)
 
     # def get(self, request, pk, format=None):
