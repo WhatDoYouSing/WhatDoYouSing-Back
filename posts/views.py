@@ -32,7 +32,6 @@ class PostListView(views.APIView):
     #     serializer = self.serializer_class(posts, many=True)
     #     return Response({"message": "포스트 조회 성공", "data": serializer.data}, status=status.HTTP_200_OK)
 
-
 class PostAddView(views.APIView):
     serializer_class = PostSerializer
 
@@ -203,7 +202,6 @@ class EmotionView(views.APIView):
         #     return Response({'message': "투표감정 조회 실패"}, status=status.HTTP_400_BAD_REQUEST)
 
         # return Response({'message': "투표감정 조회 성공", "data": data}, status=status.HTTP_200_OK)
-    
 
 class EmotionAddView(views.APIView):
 
@@ -247,3 +245,61 @@ class EmotionDelView(views.APIView):
         # emo.delete()
         # return Response({"message": "투표감정 삭제 성공"})
       
+class EmotionFunctionsView(views.APIView):
+    def get(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        emotions = Emotion.objects.filter(emo_post=post).values('content').annotate(num=Count('content'))
+        data = {
+            'post_id': pk,
+            #'content': post.lyrics,
+            'Emotion': [
+                {'content': emotion['content'], 'num': emotion['num']} for emotion in emotions
+            ]
+        }
+
+        if not emotions:
+            return Response({'message': "투표감정 조회 실패"}, status=status.HTTP_200_OK)
+
+        return Response({'message': "투표감정 조회 성공", "data": data}, status=status.HTTP_200_OK)
+
+    def patch(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        content=request.data['content']
+        now_user=request.user
+
+        # 해당 사용자와 포스트에 대한 감정 객체 확인
+        existing_emotion = Emotion.objects.filter(emo_post=pk, emo_user=now_user)
+        
+        # 이미 존재하는 경우 오류 응답
+        if existing_emotion.exists():
+            return Response({"message": "이미 투표한 감정이 존재합니다."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        emotion=EmotionSerializer(data={
+            'content':content,
+            'emo_post':post.id,
+            'emo_user':now_user.id
+        }) 
+        if emotion.is_valid():
+            emotion.save()
+            return Response({"message": "투표감정 등록 성공","data":emotion.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "투표감정 등록 실패","error":emotion.errors},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+    '''
+    serializer_class = EmotionChoiceSerializer
+
+    def get(self, request):
+        serializer = self.serializer_class(request.user)
+        return Response(serializer.data)
+    
+    def patch(self, request):
+        serializer = EmotionChoiceSerializer(request.user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': '감정 등록 성공.', 'data': serializer.validated_data}, status=status.HTTP_200_OK)
+        return Response({'message': '감정 등록 실패.', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    '''
