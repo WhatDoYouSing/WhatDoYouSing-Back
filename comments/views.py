@@ -45,11 +45,12 @@ class CommentDelView(views.APIView):
 class RecommentView(views.APIView):
     serializer_class = RecommentSerializer
 
-    def post(self, request, comment_pk, format=None):
-        comment = get_object_or_404(Comment, pk=comment_pk)
+    def post(self, request, post_pk, comment_pk, format=None):
+        post = get_object_or_404(Post, post_id=post_pk)
+        comment = get_object_or_404(Comment, comment_id=comment_pk)
         serializer = RecommentSerializer(data=request.data)
         if serializer.is_valid():
-            recomment = serializer.save(comment=comment, author=request.user)
+            recomment = serializer.save(post=post, comment=comment, author=request.user)
             return Response(
                 {"message": "대댓글 작성 성공", "data": serializer.data}, status=status.HTTP_200_OK)
         return Response({"message": "대댓글 작성 실패", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
