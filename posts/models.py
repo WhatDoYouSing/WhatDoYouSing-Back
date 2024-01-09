@@ -26,7 +26,7 @@ class Post(models.Model):
     content = models.TextField(max_length=300)
     title = models.CharField(max_length=200)
     singer = models.CharField(max_length=200)
-    link = models.CharField(max_length=200, null=True)
+    link = models.CharField(max_length=200, null=True, blank=True)
 
     sings_emotion=models.IntegerField(choices=SINGS_EMOTION_CHOICES) #게시감정
 
