@@ -170,18 +170,26 @@ class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
             posts_latest = posts.order_by('-created_at')
             posts_latest = self.paginate_queryset(posts_latest)
 
-            posts_latest_seri = EmotionsFilterSerializer(posts_latest, many=True)
+            #posts_latest_seri = EmotionsFilterSerializer(posts_latest, many=True)
 
             total_emotions = Emotion.objects.filter(emo_user=request.user).count()
             total_pages = self.paginator.page.paginator.num_pages if self.paginator else 0
             current_page = self.paginator.page.number if self.paginator and self.paginator.page else 1
+
+            myEmotionsData = []
+            for emotion in posts_latest:
+                emotion_data = {
+                    'emotion': emotion.get_content_display(),  # 감정 내용 가져오기
+                    'post_data': PostSerializer(emotion.emo_post).data  # 해당 감정이 등록된 포스트 정보 가져오기
+                }
+                myEmotionsData.append(emotion_data)
 
             response_data = {
                 'message':'내가 남긴 감정 조회 성공',
                 'total': total_emotions,
                 'total_page': total_pages,
                 'current_page': current_page,
-                '내가 남긴 감정': posts_latest_seri.data,
+                '내가 남긴 감정': myEmotionsData,
             }
 
             return Response(response_data, status=status.HTTP_200_OK)
