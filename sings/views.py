@@ -105,18 +105,16 @@ class SearchLatestView(views.APIView, PaginationHandlerMixin):
             #posts = posts.filter(Q(sings_emotion__iexact=emo))
             posts = posts.filter(Q(sings_emotion__iexact=str(emo)))
             
-        if keyword:
-            posts_latest = posts.order_by('-created_at')
+        
+        posts_latest = posts.order_by('-created_at')
 
-            total = posts_latest.__len__()
-            total_page = math.ceil(total/15)
-            posts_latest = self.paginate_queryset(posts_latest)
+        total = posts_latest.__len__()
+        total_page = math.ceil(total/15)
+        posts_latest = self.paginate_queryset(posts_latest)
 
-            posts_latest_seri = SearchSerializer(posts_latest, many=True)
+        posts_latest_seri = SearchSerializer(posts_latest, many=True)
 
-            return Response({'message':'최신순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message':'검색어가 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message':'최신순 가사 검색 성공', 'total': total, 'total_page' : total_page, 'current_page': self.current_page, 'data': {"sings": posts_latest_seri.data}}, status=status.HTTP_200_OK)
             
 
 #가사 검색 좋아요순 정렬
