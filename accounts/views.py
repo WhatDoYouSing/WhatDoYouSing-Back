@@ -218,10 +218,9 @@ class KakaoLoginView(views.APIView):
 class KakaoCallbackView(views.APIView):
     permission_classes = (AllowAny,)
 
-    def get(self, request):         # kakao access_token 요청 및 user_info 요청
+    def get(self, request):  
         data = request.query_params.copy()
 
-        # access_token 발급 요청
         code = data.get('code')
         if not code:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -256,7 +255,7 @@ class KakaoCallbackView(views.APIView):
         social_type = 'kakao'
         social_id = f"{social_type}_{user_info_json.get('id')}"
 
-        properties = user_info_json.get('properties')
+        properties = user_info_json.get('properties',{})
         nickname=properties.get('nickname','')
         profile=properties.get('thumbnail_image_url','')
         print(user_info_json)
