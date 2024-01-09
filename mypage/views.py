@@ -118,7 +118,7 @@ class CommentsCollectView(views.APIView, PaginationHandlerMixin):
 
         return Response(Cdata)
 
-
+'''
 class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
     pagination_class = MypagePagination
 
@@ -153,3 +153,37 @@ class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
         }
 
         return Response(response_data)
+'''
+
+class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
+    pagination_class = MypagePagination
+
+    def get(self, request):
+        page_number = self.request.query_params.get('page', 1)
+
+        emo = request.GET.get('emotion')
+
+        posts = Post.objects.all()
+
+        if emo:
+            posts = posts.filter(Q(sings_emotion__iexact=str(emo)))
+            posts_latest = posts.order_by('-created_at')
+            posts_latest = self.paginate_queryset(posts_latest)
+
+            posts_latest_seri = EmotionsFilterSerializer(posts_latest, many=True)
+
+            total_emotions = Emotion.objects.filter(emo_user=request.user).count()
+            total_pages = self.paginator.page.paginator.num_pages if self.paginator else 0
+            current_page = self.paginator.page.number if self.paginator and self.paginator.page else 1
+
+            response_data = {
+                'message':'내가 남긴 감정 조회 성공',
+                'total': total_emotions,
+                'total_page': total_pages,
+                'current_page': current_page,
+                '내가 남긴 감정': posts_latest_seri.data,
+            }
+
+            return Response(response_data, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'조회 실패'}, status=status.HTTP_400_BAD_REQUEST)
