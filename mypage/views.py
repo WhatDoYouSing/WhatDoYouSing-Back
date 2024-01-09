@@ -126,7 +126,7 @@ class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
     def get(self, request):
         page_number = self.request.query_params.get('page', 1)
 
-        emotion_content = self.request.query_params.get('emotion_content', None)
+        emotion_content = self.request.query_params.get('emotion', None)
         myEmotions = Emotion.objects.filter(emo_user=self.request.user)
 
         if emotion_content:
