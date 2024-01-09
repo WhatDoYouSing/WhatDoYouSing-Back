@@ -129,7 +129,7 @@ class EmotionsCollectView(views.APIView, PaginationHandlerMixin):
         myEmotions = Emotion.objects.filter(emo_user=self.request.user)
 
         if emotion_content:
-            myEmotions = myEmotions.filter(content=emotion_content)
+            myEmotions = myEmotions.filter(Q(content__iexact=str(emotion_content)))
 
         myEmotions = self.paginate_queryset(myEmotions)
 
