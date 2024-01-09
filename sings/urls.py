@@ -12,9 +12,9 @@ urlpatterns = [
     path('searchlatest/',SearchLatestView.as_view()),
     path('searchlikes/',SearchLikesView.as_view()),
     path('searchcomments/',SearchCommentsView.as_view()),
-    path('emosearchlatest/',SearchEmoLatestView.as_view()),
-    path('emosearchlikes/',SearchEmoLikesView.as_view()),
-    path('emosearchcomments/',SearchEmoCommentsView.as_view()),
+    #path('emosearchlatest/',SearchEmoLatestView.as_view()),
+    #path('emosearchlikes/',SearchEmoLikesView.as_view()),
+    #path('emosearchcomments/',SearchEmoCommentsView.as_view()),
     
     
 ]
