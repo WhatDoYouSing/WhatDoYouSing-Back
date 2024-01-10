@@ -271,20 +271,21 @@ class EmotionFunctionsView(views.APIView):
         # 해당 사용자와 포스트에 대한 감정 객체 확인
         existing_emotion = Emotion.objects.filter(emo_post=pk, emo_user=now_user)
         
-        # 이미 존재하는 경우 오류 응답
         if existing_emotion.exists():
-            return Response({"message": "이미 투표한 감정이 존재합니다."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        emotion=EmotionSerializer(data={
-            'content':content,
-            'emo_post':post.id,
-            'emo_user':now_user.id
-        }) 
-        if emotion.is_valid():
-            emotion.save()
-            return Response({"message": "투표감정 등록 성공","data":emotion.data}, status=status.HTTP_200_OK)
+            emotion = existing_emotion.first()
+            serializer = EmotionSerializer(emotion, data={'content': content}, partial=True)
         else:
-            return Response({"message": "투표감정 등록 실패","error":emotion.errors},status=status.HTTP_400_BAD_REQUEST)
+            serializer = EmotionSerializer(data={
+                'content': content,
+                'emo_post': post.id,
+                'emo_user': now_user.id
+            })
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "투표감정 등록 성공", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "투표감정 등록 실패", "error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
