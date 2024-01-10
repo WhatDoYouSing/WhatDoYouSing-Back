@@ -58,6 +58,9 @@ class PostScrapView(views.APIView):
         return Response({"scraped": scraped_by_user}, status=status.HTTP_200_OK)
 
     def post(self, request, pk):
+        if not request.user.is_authenticated:  # Check if the user is not authenticated
+            return Response({"message": "로그인을 해주세요"}, status=status.HTTP_401_UNAUTHORIZED)
+        
         post = get_object_or_404(Post, pk=pk)
         user = request.user
 
@@ -139,6 +142,9 @@ class EmotionFunctionsView(views.APIView):
         return Response({'message': "투표감정 조회 성공", "data": data}, status=status.HTTP_200_OK)
 
     def patch(self, request, pk):
+        if not request.user.is_authenticated:  # Check if the user is not authenticated
+            return Response({"message": "로그인을 해주세요"}, status=status.HTTP_401_UNAUTHORIZED)
+        
         post = get_object_or_404(Post, pk=pk)
         content=request.data['content']
         now_user=request.user

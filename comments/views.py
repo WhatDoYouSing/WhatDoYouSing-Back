@@ -27,6 +27,9 @@ class CommentView(views.APIView):
         return Response({'message': '댓글조회 성공', 'data': serializer.data}, status=status.HTTP_200_OK)
   
     def post(self, request, post_pk, format=None):
+        if not request.user.is_authenticated:  # Check if the user is not authenticated
+            return Response({"message": "로그인을 해주세요"}, status=status.HTTP_401_UNAUTHORIZED)
+        
         serializer = CommentSerializer(data={**request.data, 'post': post_pk})
         if serializer.is_valid():
             serializer.save(author=request.user)
@@ -46,6 +49,9 @@ class RecommentView(views.APIView):
     serializer_class = RecommentSerializer
     
     def post(self, request, comment_pk, format=None):
+        if not request.user.is_authenticated:  # Check if the user is not authenticated
+            return Response({"message": "로그인을 해주세요"}, status=status.HTTP_401_UNAUTHORIZED)
+        
         comment = get_object_or_404(Comment, pk=comment_pk)
         serializer = RecommentSerializer(data=request.data)
         if serializer.is_valid():
@@ -72,6 +78,9 @@ class CommentLikeView(views.APIView):
             return Response({"message": "댓글이 존재하지 않습니다."}, status=status.HTTP_200_OK)
 
     def post(self, request, comment_pk):
+        if not request.user.is_authenticated:  # Check if the user is not authenticated
+            return Response({"message": "로그인을 해주세요"}, status=status.HTTP_401_UNAUTHORIZED)
+        
         comment = get_object_or_404(Comment, comment_id=comment_pk)
         user = request.user
 
@@ -95,6 +104,9 @@ class RecommentLikeView(views.APIView):
             return Response({"message": "해당하는 댓글이나 대댓글이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
         
     def post(self, request, comment_pk, recomment_pk):
+        if not request.user.is_authenticated:  # Check if the user is not authenticated
+            return Response({"message": "로그인을 해주세요"}, status=status.HTTP_401_UNAUTHORIZED)
+        
         recomment = get_object_or_404(Recomment, comment_id=comment_pk, pk=recomment_pk)
         user = request.user
 
