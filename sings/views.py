@@ -77,7 +77,7 @@ class HomeLikesView(views.APIView):
 class RecommendView(views.APIView):
     def get(self, request):
         all_posts = Post.objects.all()
-        ran_size = min(1, len(all_posts))  # 리스트 크기보다 크지 않은 값을 선택
+        ran_size = min(60, len(all_posts))  # 리스트 크기보다 크지 않은 값을 선택
         random_posts = random.sample(list(all_posts), ran_size)
         random_posts_seri = RecommendSerializer(random_posts,many=True)
 
