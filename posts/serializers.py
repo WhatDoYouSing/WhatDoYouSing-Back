@@ -33,6 +33,10 @@ class FunctionMixin:
     def get_com_relikes_count(self, obj):
         return obj.com_relikes.count()
     
+    def get_is_scraped(self, obj):
+        request_user = self.context['request'].user
+        return request_user in obj.scrap.all()
+    
     
 class PostSerializer(FunctionMixin, serializers.ModelSerializer):
     #comment_count = serializers.SerializerMethodField()
@@ -60,10 +64,6 @@ class PostSerializer(FunctionMixin, serializers.ModelSerializer):
         ]
 
         read_only_fields = ["author"]
-
-    def get_is_scraped(self, obj):
-        request_user = self.context['request'].user
-        return request_user in obj.scrap.all()
 
 class EmotionSerializer(serializers.ModelSerializer):
     class Meta:
