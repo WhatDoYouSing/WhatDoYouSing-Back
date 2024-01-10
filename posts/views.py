@@ -113,8 +113,9 @@ class EmotionFunctionsView(views.APIView):
         post = get_object_or_404(Post, pk=pk)
         
         emotions = Emotion.objects.filter(emo_post=post).values('content').annotate(num=Count('content'))
-        now_user = request.user
-        my_emotion = Emotion.objects.filter(emo_post=post, emo_user=now_user).values('content')
+        #now_user = request.user
+        #my_emotion = Emotion.objects.filter(emo_post=post, emo_user=now_user).values('content')
+        my_emotion = Emotion.objects.filter(emo_post=post).values('content')
 
         data = {
             'post_id': pk,
