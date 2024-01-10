@@ -13,7 +13,7 @@ from .models import *
 
 # Create your views here.
 class PostListView(views.APIView):
-    serializer_class = PostSerializer
+    serializer_class = PostGetSerializer
 
     def get(self, request, pk, format=None):
         try:
