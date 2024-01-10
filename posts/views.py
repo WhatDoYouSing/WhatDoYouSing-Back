@@ -24,14 +24,6 @@ class PostListView(views.APIView):
         serializer = self.serializer_class(post, context={'request': request})
         return Response({"message": "가사 조회 성공", "data": serializer.data}, status=status.HTTP_200_OK)
 
-    # def get(self, request, pk, format=None):
-    #     posts = Post.objects.all()
-    #     if not posts:
-    #         return Response({"message": "포스트가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     serializer = self.serializer_class(posts, many=True)
-    #     return Response({"message": "포스트 조회 성공", "data": serializer.data}, status=status.HTTP_200_OK)
-
 class PostAddView(views.APIView):
     serializer_class = PostSerializer
 
@@ -119,10 +111,14 @@ class EmotionDelView(views.APIView):
 class EmotionFunctionsView(views.APIView):
     def get(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
+        
         emotions = Emotion.objects.filter(emo_post=post).values('content').annotate(num=Count('content'))
+        now_user = request.user
+        my_emotions = Emotion.objects.filter(emo_post=post, emo_user=now_user).values('content')
+
         data = {
             'post_id': pk,
-            #'content': post.lyrics,
+            'my_emotions': [emotion['content'] for emotion in my_emotions],
             'Emotion': [
                 {'content': emotion['content'], 'num': emotion['num']} for emotion in emotions
             ]
