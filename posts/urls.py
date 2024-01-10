@@ -12,5 +12,5 @@ urlpatterns = [
     path("scrap/<int:pk>/", PostScrapView.as_view()),
     path("<int:pk>/emotions/", EmotionFunctionsView.as_view()),
     #path("<int:pk>/emotions/add/", EmotionFunctionsView.as_view()),
-    #path("<int:pk>/emotions/del/", EmotionDelView.as_view()),
+    path("<int:pk>/emotions/del/", EmotionDelView.as_view()),
 ]
