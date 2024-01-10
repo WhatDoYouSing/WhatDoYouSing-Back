@@ -32,6 +32,11 @@ class PostAddView(views.APIView):
         if not request.user.is_authenticated:  # Check if the user is not authenticated
             return Response({"message": "로그인을 해주세요"}, status=status.HTTP_401_UNAUTHORIZED)
         
+        required_fields = ['lyrics', 'content', 'title', 'singer', 'sings_emotion']
+        for field in required_fields:
+            if field not in request.data:
+                return Response({"message": f"{field} 필드를 작성해 주세요."}, status=status.HTTP_400_BAD_REQUEST)
+        
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(author=request.user)
