@@ -26,8 +26,13 @@ class PostListView(views.APIView):
 
 class PostAddView(views.APIView):
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]  # Import IsAuthenticated
+
 
     def post(self, request, format=None):  # 게시글 작성 POST 메소드
+        if not request.user.is_authenticated:  # Check if the user is not authenticated
+            return Response({"message": "로그인을 해주세요"}, status=status.HTTP_401_UNAUTHORIZED)
+        
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(author=request.user)
