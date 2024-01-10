@@ -44,7 +44,7 @@ class CommentDelView(views.APIView):
 
 class RecommentView(views.APIView):
     serializer_class = RecommentSerializer
-
+    
     def post(self, request, comment_pk, format=None):
         comment = get_object_or_404(Comment, pk=comment_pk)
         serializer = RecommentSerializer(data=request.data)
