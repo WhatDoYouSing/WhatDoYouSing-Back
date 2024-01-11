@@ -9,10 +9,9 @@ urlpatterns = [
     path('update/password/', ChangePasswordView.as_view()),
     path('update/nickname/', ChangeNicknameView.as_view()),
     path('duplicate/',DuplicateIDView.as_view()),
-    path('access/', UserAccessView.as_view()),
     path('delete/', UserDeleteView.as_view()),
 
     path('kakao/', KakaoLoginView.as_view()),
     path('kakao/callback/',KakaoCallbackView.as_view()),
-    #path('kakao/delete', KUserDeleteView.as_view()),
+    path('kakao/delete', KUserDeleteView.as_view()),
 ]

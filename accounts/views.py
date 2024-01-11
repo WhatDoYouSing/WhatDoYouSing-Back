@@ -146,39 +146,14 @@ class UserDeleteView(generics.DestroyAPIView):
 
         return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.'}, status=status.HTTP_200_OK)
 
-'''   
+
 class KUserDeleteView(views.APIView):
-    permission_classes = [IsAuthenticated]
 
     def delete(self, request):
         user = request.user
         user.delete()
         return Response({'message': '계정 삭제 성공'}, status=HTTP_204_NO_CONTENT)
-'''
 
-class UserAccessView(generics.RetrieveAPIView):
-    serializer_class = UserAccessSerializer
-    permission_classes = [IsAuthenticated]
-
-    def retrieve(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        user = request.user
-        password = serializer.validated_data['password']
-
-        if not user.check_password(password):
-            return Response({'message': '접근 실패, 비밀번호가 옳지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # If the password is correct, return user information (You can customize this part)
-        user_data = {
-            'id': user.id,
-            'username': user.username,
-            'nickname': user.nickname,
-            'profile': user.profile,
-        }
-
-        return Response({'message': '접근 성공', 'data': user_data}, status=status.HTTP_200_OK)
 
 #카카오
 class KakaoLoginView(views.APIView):
