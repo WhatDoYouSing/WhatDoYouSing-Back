@@ -146,15 +146,16 @@ class UserDeleteView(generics.DestroyAPIView):
 
         return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.'}, status=status.HTTP_200_OK)
 
-'''   
-class KUserDeleteView(views.APIView):
+class KUserDeleteView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):
 
-    def delete(self, request):
         user = request.user
+
         user.delete()
-        return Response({'message': '계정 삭제 성공'}, status=HTTP_204_NO_CONTENT)
-'''
+
+        return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.'}, status=status.HTTP_200_OK)
 
 #카카오
 class KakaoLoginView(views.APIView):
