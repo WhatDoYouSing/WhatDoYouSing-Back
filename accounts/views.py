@@ -145,30 +145,15 @@ class UserDeleteView(generics.DestroyAPIView):
         user.delete()
 
         return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.'}, status=status.HTTP_200_OK)
-    
+
+'''   
 class KUserDeleteView(views.APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def delete(self, request):
         user = request.user
         user.delete()
         return Response({'message': '계정 삭제 성공'}, status=HTTP_204_NO_CONTENT)
-
-'''
-class UserAccessView(views.APIView):
-    serializer_class=UserConfirmSerializer
-
-    def post(self, request):
-        serializer = UserConfirmSerializer(data=request.data)
-
-        if serializer.is_valid():
-            user = request.user
-            enter_password = serializer.validated_data['enter_password']
-
-            if not user.check_password(enter_password):
-                return Response({'message': '접근 실패, 비밀번호가 옳지 않습니다.', 'access':False}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response({'message': '접근 성공.', 'access':True}, status=status.HTTP_200_OK)
 '''
 
 class UserAccessView(generics.RetrieveAPIView):
