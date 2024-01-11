@@ -145,6 +145,19 @@ class UserDeleteView(generics.DestroyAPIView):
         user.delete()
 
         return Response({'message': '접근 성공. 회원 탈퇴가 완료되었습니다.'}, status=status.HTTP_200_OK)
+    
+class KUserDeleteView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        user = request.user  
+
+        try:
+            user.delete()
+            return Response({'message': '회원탈퇴 완료'}, status=status.HTTP_204_NO_CONTENT)
+        
+        except Exception as e:
+            return Response({'detail': f'오류 발생: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 '''
 class UserAccessView(views.APIView):
