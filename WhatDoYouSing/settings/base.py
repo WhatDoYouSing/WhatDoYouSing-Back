@@ -145,7 +145,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
-            "charset": "utf8mb4",
+            #"charset": "utf8mb4",
         },
     },
 ]
