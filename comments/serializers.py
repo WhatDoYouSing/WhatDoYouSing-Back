@@ -34,14 +34,14 @@ class FunctionMixin:
         # 댓글과 대댓글 수를 더하여 반환
         return comment_count + recomment_count
     
+
     def get_is_liked(self, obj):
         request_user = self.context['request'].user
         return request_user in obj.com_likes.all()
     
     def get_is_reliked(self, obj):
         request_user = self.context['request'].user
-        return request_user in obj.com_relikes.all()
-    
+        return request_user in obj.com_relikes.all() 
     
     
 class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
@@ -75,7 +75,7 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
     com_count = serializers.SerializerMethodField()
-    _is_liked = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
