@@ -40,15 +40,6 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
-    liked_by_user = serializers.SerializerMethodField()
-
-    def get_liked_by_user(self, obj):
-        # 현재 로그인한 유저가 좋아요를 눌렀는지 여부를 반환
-        request = self.context.get('request', None)
-        if request and request.user.is_authenticated:
-            return request.user in obj.com_likes.all()
-        else:
-            return None  # 로그인하지 않은 경우에는 null 반환
 
     class Meta:
         model = Recomment
@@ -61,7 +52,6 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "com_content",
             "com_relikes",
             "relikes_count",
-            "liked_by_user", #로그인한 유저의 좋아요 여부s
             "created_at"
         ]
     read_only_fields = ["author"]
@@ -74,16 +64,6 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
     com_count = serializers.SerializerMethodField()
-    liked_by_user = serializers.SerializerMethodField()
-
-    def get_liked_by_user(self, obj):
-        # 현재 로그인한 유저가 좋아요를 눌렀는지 여부를 반환
-        request = self.context.get('request', None)
-        if request and request.user.is_authenticated:
-            return request.user in obj.com_likes.all()
-        else:
-            return None  # 로그인하지 않은 경우에는 null 반환
-
 
     class Meta:
         model = Comment
@@ -96,7 +76,6 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "com_content",
             "com_likes",
             "likes_count",
-            "liked_by_user", #로그인한 유저의 좋아요 여부
             "recomments",
             "recomments_count",
             "com_count",
@@ -109,16 +88,6 @@ class MypageCommentSerializer(FunctionMixin, serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
-    liked_by_user = serializers.SerializerMethodField()
-
-    def get_liked_by_user(self, obj):
-        # 현재 로그인한 유저가 좋아요를 눌렀는지 여부를 반환
-        request = self.context.get('request', None)
-        if request and request.user.is_authenticated:
-            return request.user in obj.com_likes.all()
-        else:
-            return None  # 로그인하지 않은 경우에는 null 반환
-
 
     class Meta:
         model = Comment
@@ -131,7 +100,6 @@ class MypageCommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "com_content",
             "com_likes",
             "likes_count",
-            "liked_by_user", #로그인한 유저의 좋아요 여부
             "created_at"
         ]
     read_only_fields = ["author"]
