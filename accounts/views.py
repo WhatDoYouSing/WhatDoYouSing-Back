@@ -29,10 +29,10 @@ BASE_URL = 'http://whatdoyousing.com/'
 
 KAKAO_CONFIG = {
     "KAKAO_REST_API_KEY":getattr(WhatDoYouSing.settings.base, 'KAKAO_CLIENT_ID', None),
-    #"KAKAO_REDIRECT_URI": f"http://whatdoyousing.com/accounts/kakao/callback/",
+    "KAKAO_REDIRECT_URI": f"http://whatdoyousing.com/accounts/kakao/callback/",
     #"KAKAO_REDIRECT_URI": "http://localhost:3000/accounts/kakao/callback/",
     #"KAKAO_REDIRECT_URI": "https://what-do-you-sing-front.vercel.app/accounts/kakao/callback/",
-    "KAKAO_REDIRECT_URI": "https://whatdoyousing.swygbro.com/accounts/kakao/callback/",
+    #"KAKAO_REDIRECT_URI": "https://whatdoyousing.swygbro.com/accounts/kakao/callback/",
     "KAKAO_CLIENT_SECRET_KEY": getattr(WhatDoYouSing.settings.base, 'KAKAO_CLIENT_SECRET_KEY', None), 
     "KAKAO_PW":getattr(WhatDoYouSing.settings.base, 'KAKAO_PW', None),
 }
