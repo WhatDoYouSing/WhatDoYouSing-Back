@@ -44,7 +44,6 @@ class CommentDelView(views.APIView):
         comment.delete()
         return Response({"message": "댓글 삭제 성공"}, status=status.HTTP_204_NO_CONTENT)
 
-
 class RecommentView(views.APIView):
     serializer_class = RecommentSerializer
     
@@ -66,7 +65,6 @@ class RecommentDelView(views.APIView):
         recomment.delete()
         return Response({"message": "대댓글 삭제 성공"}, status=status.HTTP_204_NO_CONTENT)
    
-
 class CommentLikeView(views.APIView):
 
     def get(self, request, comment_pk):
@@ -118,3 +116,4 @@ class RecommentLikeView(views.APIView):
             reliked = True
 
         return Response({"message": "대댓글 좋아요 변경 성공", "reliked": reliked}, status=status.HTTP_200_OK)
+    
