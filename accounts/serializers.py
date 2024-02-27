@@ -70,7 +70,8 @@ class LoginSerializer(serializers.Serializer):
                     'username':user.username,
                     'nickname': user.nickname,
                     'profile':user.profile,
-                    'access_token': access
+                    'access_token': access,
+                    'refresh_token': refresh,
                 }
 
                 return data
