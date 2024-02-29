@@ -116,4 +116,3 @@ class RecommentLikeView(views.APIView):
             reliked = True
 
         return Response({"message": "대댓글 좋아요 변경 성공", "reliked": reliked}, status=status.HTTP_200_OK)
-    
