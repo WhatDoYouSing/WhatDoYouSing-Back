@@ -34,7 +34,7 @@ class FunctionMixin:
         # 댓글과 대댓글 수를 더하여 반환
         return comment_count + recomment_count
     
-
+    '''
     def get_is_liked(self, obj):
         request_user = self.context['request'].user
         return request_user in obj.com_likes.all()
@@ -42,6 +42,7 @@ class FunctionMixin:
     def get_is_reliked(self, obj):
         request_user = self.context['request'].user
         return request_user in obj.com_relikes.all() 
+    '''
     
     
 class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
@@ -49,7 +50,7 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
-    is_reliked = serializers.SerializerMethodField()
+    #is_reliked = serializers.SerializerMethodField()
 
     class Meta:
         model = Recomment
@@ -62,7 +63,7 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "com_content",
             "com_relikes",
             "relikes_count",
-            "is_reliked",
+            #"is_reliked",
             "created_at"
         ]
     read_only_fields = ["author"]
@@ -75,7 +76,7 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
     com_count = serializers.SerializerMethodField()
-    is_liked = serializers.SerializerMethodField()
+    #is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
@@ -88,7 +89,7 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "com_content",
             "com_likes",
             "likes_count",
-            "is_liked",
+            #"is_liked",
             "recomments",
             "recomments_count",
             "com_count",
@@ -116,3 +117,4 @@ class MypageCommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "created_at"
         ]
     read_only_fields = ["author"]
+
