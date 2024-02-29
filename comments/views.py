@@ -70,7 +70,7 @@ class CommentLikeView(views.APIView):
     def get(self, request, comment_pk):
         try:
             comment = Comment.objects.get(comment_id=comment_pk)
-            liked_by_user = request.user in comment.com_likess.all()
+            liked_by_user = request.user in comment.com_likes.all()
             return Response({"liked": liked_by_user}, status=status.HTTP_200_OK)
         except Comment.DoesNotExist:
             return Response({"message": "댓글이 존재하지 않습니다."}, status=status.HTTP_200_OK)
@@ -96,7 +96,7 @@ class RecommentLikeView(views.APIView):
     def get(self, request, comment_pk, recomment_pk):
         try:
             recomment = get_object_or_404(Recomment, id=recomment_pk, comment_id=comment_pk)
-            reliked_by_user = request.user in recomment.com_relikess.all()
+            reliked_by_user = request.user in recomment.com_relikes.all()
             return Response({"reliked": reliked_by_user}, status=status.HTTP_200_OK)
         except Recomment.DoesNotExist:
             return Response({"message": "해당하는 댓글이나 대댓글이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
