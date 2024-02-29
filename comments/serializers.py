@@ -33,7 +33,7 @@ class FunctionMixin:
         
         # 댓글과 대댓글 수를 더하여 반환
         return comment_count + recomment_count
-    
+     
     def get_is_liked(self, obj):
         request_user = self.context['request'].user
         return request_user in obj.com_likes.all()
