@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     # django-rest-auth
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
     'rest_auth',
 
     # django-allauth
@@ -90,10 +91,12 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=10),
     #'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS': True,
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
     'TOKEN_USER_CLASS': 'accounts.User',
 }
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
