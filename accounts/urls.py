@@ -12,7 +12,7 @@ urlpatterns = [
     path('duplicate/',DuplicateIDView.as_view()),
     path('delete/', UserDeleteView.as_view()),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
+    
     path('kakao/', KakaoLoginView.as_view()),
     path('kakao/callback/',KakaoCallbackView.as_view()),
     path('kakao/delete/', KUserDeleteView.as_view()),
