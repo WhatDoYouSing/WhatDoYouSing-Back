@@ -85,7 +85,7 @@ class PostGetSerializer(FunctionMixin, serializers.ModelSerializer):
             "scrap",
             "is_scraped",
             "created_at",
-        ]
+        ] 
 
         read_only_fields = ["author"]
 

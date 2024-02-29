@@ -7,7 +7,7 @@ class Post(models.Model):
     SINGS_EMOTION_CHOICES = [
         (0, '쾌감'),
         (1, '벅참'),
-        (2, '신남'),
+        (2, '신남'), 
         (3, '행복'),
         (4, '희망'),
         (5, '설렘'),

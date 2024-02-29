@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from django.db.models import Q, Count
 
 from .serializers import *
-from .models import *
+from .models import * 
 
 # Create your views here.
 class PostListView(views.APIView):

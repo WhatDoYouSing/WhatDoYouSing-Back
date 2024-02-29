@@ -34,3 +34,4 @@ class Recomment(models.Model):
     com_relikes = models.ManyToManyField("accounts.User", related_name="liked_recomments", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+ 
