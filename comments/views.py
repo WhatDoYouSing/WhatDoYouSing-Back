@@ -17,6 +17,11 @@ from .models import *
 class CommentView(views.APIView):
     serializer_class = CommentSerializer
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
     def get(self, request, post_pk, format=None):
         comments = Comment.objects.filter(post_id=post_pk)
         serializer = self.serializer_class(comments, many=True)
@@ -46,6 +51,11 @@ class CommentDelView(views.APIView):
 
 class RecommentView(views.APIView):
     serializer_class = RecommentSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
     
     def post(self, request, comment_pk, format=None):
         if not request.user.is_authenticated:  # Check if the user is not authenticated

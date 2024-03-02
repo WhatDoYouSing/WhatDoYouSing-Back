@@ -50,6 +50,7 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
     author_profile = serializers.SerializerMethodField()
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
     #is_reliked = serializers.SerializerMethodField()
+    liked_by_user = serializers.SerializerMethodField()
 
     class Meta:
         model = Recomment
@@ -63,9 +64,16 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "com_relikes",
             "relikes_count",
             #"is_reliked",
+            "liked_by_user",
             "created_at"
         ]
     read_only_fields = ["author"]
+
+    def get_liked_by_user(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return request.user in obj.com_likes.all()
+        return False
 
 
 class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
@@ -76,6 +84,7 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
     author_profile = serializers.SerializerMethodField()
     com_count = serializers.SerializerMethodField()
     #is_liked = serializers.SerializerMethodField()
+    liked_by_user = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
@@ -89,12 +98,19 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "com_likes",
             "likes_count",
             #"is_liked",
+            "liked_by_user",
             "recomments",
             "recomments_count",
             "com_count",
             "created_at"
         ]
     read_only_fields = ["author"]
+
+    def get_liked_by_user(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return request.user in obj.com_likes.all()
+        return False
 
 
 class MypageCommentSerializer(FunctionMixin, serializers.ModelSerializer):
