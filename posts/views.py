@@ -7,6 +7,9 @@ from rest_framework import views
 from rest_framework.status import *
 from rest_framework.response import Response
 from django.db.models import Q, Count
+from django.conf import settings
+import requests
+import datetime
 
 from .serializers import *
 from .models import * 
@@ -174,7 +177,24 @@ class EmotionFunctionsView(views.APIView):
             return Response({"message": "투표감정 등록 실패", "error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
+def update_spotify():
+    auth_url = 'https://accounts.spotify.com/api/token'
+    headers = {
+        'content-type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + settings.SPOTIFY_AUTHORIZATION
+    }
+    data = {
+        'grant_type': 'refresh_token',
+        'refresh_token': settings.SPOTIFY_REFRESH_TOKEN,
+        'client_id': settings.SPOTIFY_CLIENT_ID,
+    }
+    auth_response = requests.post(auth_url, headers=headers,data=data)
+    access_token = auth_response.json().get('access_token')
 
+    if Spotify.objects.exists():
+        token = Spotify.objects.get(id=1)
+        token.update_token(access_token)
+    else:
+        token = Spotify(access_token=access_token)
+        token.save()
 
-
-   
