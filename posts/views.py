@@ -176,6 +176,11 @@ class EmotionFunctionsView(views.APIView):
         else:
             return Response({"message": "투표감정 등록 실패", "error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+class SpotifyAcessTokenView(views.APIView):
+    def get(self,request):
+        access_token = Spotify.objects.get(id=1).access_token
+        return Response({"message": "Spotify AccessToken 조회 성공", "data": {"access_token":access_token}}, status=status.HTTP_200_OK)
+
 
 def update_spotify():
     auth_url = 'https://accounts.spotify.com/api/token'
