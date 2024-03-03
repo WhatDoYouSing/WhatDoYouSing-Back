@@ -17,3 +17,4 @@ django-rest-auth
 django-allauth==0.43.0
 # django-allauth
 django-apscheduler
+tzdata
