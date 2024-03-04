@@ -215,7 +215,7 @@ STATIC_URL = "static/"
 #     os.path.join(BASE_DIR, 'static'),
 #     os.path.join(BASE_DIR,'api','static'),
 # ]
-STATIC_ROOT = os.path.join('staticfiles')
+STATIC_ROOT = os.path.join('static')
 
 # Media files
 MEDIA_URL = '/media/'
