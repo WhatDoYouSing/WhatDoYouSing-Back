@@ -102,29 +102,19 @@ class RecommendView(views.APIView):
         # 로그인 했을 때 -> 새로운 추천시스템(1안)
         if request.user.is_authenticated:  # Check if the user is authenticated
             # (1)내가 저장한 (북마크) 게시물의 감정 가져오기
-            saved_emotions = Emotion.objects.filter(emo_post__scrap__id=request.user.id)
+            saved_emotions = Emotion.objects.filter(emo_post__scrap=request.user)
             # (2)내가 감정을 남긴 게시물의 감정 가져오기
-            user_emotions = Emotion.objects.filter(emo_user=request.user)
-            # 현재 요청한 사용자가 남긴 모든 감정 가져오기
-            emotion_posts = [
-                user_emotion.emo_post for user_emotion in user_emotions
-            ]  # 사용자가 남긴 감정에 해당하는 게시물 가져오기
-            emo_emotions = [
-                post.sings_emotion for post in emotion_posts
-            ]  # 각 게시물에 연결된 감정 태그 가져오기
-
+            emo_emotions = Emotion.objects.filter(emo_post__content=request.user)
             # (3)내가 댓글을 남긴 게시물의 감정 가져오기
-            user_comments = Comment.objects.filter(
-                author=request.user
-            )  # 현재 요청한 사용자가 작성한 댓글 가져오기
-            commented_posts = user_comments.values_list("post", flat=True)
-            commented_emotions = Post.objects.filter(pk__in=commented_posts)
-            # 각 게시물에 연결된 감정 태그 가져오기
-
+            user_comments = Comment.object.filter(author=request.user)
+            commented_posts_pks = user_comments.values_list("post__pk", flat=True)
+            commented_emotions = Emotion.objects.filter(
+                emo_post_id__in=commented_posts_pks
+            )
             # (4)내가 남긴 가사의 감정 가져오기
-            lyric_emotions = Emotion.objects.filter(user=request.user)
+            lyric_emotions = Emotion.objects.filter(emo_post__author=request.user)
 
-            # 각 경로에서 가져온 감정을 종합
+            # 4가지 경로로 가져온 감정 쿼리셋 합산
             all_emotions = (
                 saved_emotions | emo_emotions | commented_emotions | lyric_emotions
             )
