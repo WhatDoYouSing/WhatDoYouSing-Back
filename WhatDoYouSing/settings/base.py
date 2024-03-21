@@ -33,9 +33,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env('DEBUG')
-KAKAO_CLIENT_ID= env('KAKAO_CLIENT_ID')
-KAKAO_APP_ID=env('KAKAO_APP_ID')
-KAKAO_CLIENT_SECRET_KEY=env('KAKAO_CLIENT_SECRET_KEY')
+KAKAO_CLIENT_ID = env('KAKAO_CLIENT_ID')
+KAKAO_APP_ID = env('KAKAO_APP_ID')
+KAKAO_CLIENT_SECRET_KEY = env('KAKAO_CLIENT_SECRET_KEY')
+SPOTIFY_REFRESH_TOKEN = env('SPOTIFY_REFRESH_TOKEN')
+SPOTIFY_CLIENT_ID = env('SPOTIFY_CLIENT_ID')
+SPOTIFY_AUTHORIZATION = env('SPOTIFY_AUTHORIZATION')
 
 ALLOWED_HOSTS = ['*']
 
@@ -70,6 +73,8 @@ INSTALLED_APPS = [
 
     "rest_framework_simplejwt",
 
+    "django_apscheduler",
+
     'accounts',
     'sings',
     'comments',
@@ -77,6 +82,10 @@ INSTALLED_APPS = [
     'posts',
 
 ]
+
+# apschedular
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"  
+SCHEDULER_DEFAULT = True
 
 SITE_ID = 1
 
@@ -201,15 +210,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATIC_ROOT = os.path.join('staticfiles')
 STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    os.path.join(BASE_DIR,'api','static'),
-]
-STATIC_ROOT = os.path.join('staticfiles')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+#     os.path.join(BASE_DIR,'api','static'),
+# ]
+STATIC_ROOT = os.path.join('static')
 
 # Media files
 MEDIA_URL = '/media/'

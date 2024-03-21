@@ -24,7 +24,11 @@ class CommentView(views.APIView):
 
     def get(self, request, post_pk, format=None):
         comments = Comment.objects.filter(post_id=post_pk)
+<<<<<<< HEAD
         serializer = self.serializer_class(comments, many=True,context={'request': request})
+=======
+        serializer = self.serializer_class(comments, many=True, context={'request': request})
+>>>>>>> 279098ef80881230d5d4636c27d202f57480e409
 
         if not comments.exists():
             return Response({'message': '댓글이 존재하지 않습니다.'}, status=status.HTTP_200_OK)

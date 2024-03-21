@@ -66,3 +66,10 @@ class Emotion(models.Model):
     content=models.IntegerField(choices=EMOTION_CHOICES)
     emo_post=models.ForeignKey(Post, related_name='emo_post',on_delete=models.CASCADE)
     emo_user=models.ForeignKey("accounts.User", related_name='emo_user',on_delete=models.CASCADE)
+
+class Spotify(models.Model):
+    access_token=models.CharField(max_length=200)
+
+    def update_token(self, new_token):
+        self.access_token = new_token
+        self.save()
