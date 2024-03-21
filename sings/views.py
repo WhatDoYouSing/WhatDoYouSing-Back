@@ -106,7 +106,7 @@ class RecommendView(views.APIView):
             # (2)내가 감정을 남긴 게시물의 감정 가져오기
             emo_emotions = Emotion.objects.filter(emo_post__content=request.user)
             # (3)내가 댓글을 남긴 게시물의 감정 가져오기
-            user_comments = Comment.object.filter(author=request.user)
+            user_comments = Comment.objects.filter(author=request.user)
             commented_posts_pks = user_comments.values_list("post__pk", flat=True)
             commented_emotions = Emotion.objects.filter(
                 emo_post_id__in=commented_posts_pks
