@@ -102,52 +102,60 @@ class RecommendView(views.APIView):
         # 로그인 했을 때 -> 새로운 추천시스템(1안)
         if request.user.is_authenticated:  # Check if the user is authenticated
             user = request.user
+            emotion_counts = [0] * 12 
             # (1)내가 저장한 (북마크) 게시물의 감정 가져오기
-            saved_posts = Post.objects.filter(scrap=user)
-            saved_emotions = saved_posts.sings_emotion
+            scraped_posts = user.scraped_posts.all()
+            for post in scraped_posts:
+                emotion_index = post.sings_emotion
+                emotion_counts[emotion_index] += 1
             # (2)내가 감정을 남긴 게시물의 감정 가져오기
-            emo_emotions = Emotion.objects.filter(emo_post__content=request.user)
+            emo_emotions = Emotion.objects.filter(emo_user=user).all()
+            for emotion in emo_emotions:
+                emotion_index = emotion.emo_post.sings_emotion
+                emotion_counts[emotion_index] += 1
             # (3)내가 댓글을 남긴 게시물의 감정 가져오기
-            user_comments = Comment.objects.filter(author=request.user)
-            commented_posts_pks = user_comments.values_list("post__pk", flat=True)
-            commented_emotions = Emotion.objects.filter(
-                emo_post_id__in=commented_posts_pks
-            )
+            user_comments = Comment.objects.filter(author=user).all()
+            for comment in user_comments:
+                emotion_index = comment.post.sings_emotion
+                emotion_counts[emotion_index] += 1
             # (4)내가 남긴 가사의 감정 가져오기
-            written_sings = Post.objects.filter(author=request.user)
-            lyric_emotions = written_sings.sings_emotion
-
-            # 4가지 경로로 가져온 감정 쿼리셋 합산
-            all_emotions = (
-                saved_emotions | emo_emotions | commented_emotions | lyric_emotions
-            )
-
-            # 종합된 감정을 추천에 활용하기 위해 감정 태그를 리스트로 변환
-            all_emotion_tags = [emotion.content for emotion in all_emotions]
+            written_sings = Post.objects.filter(author=user).all()
+            for sing in written_sings:
+                emotion_index = sing.sings_emotion
+                emotion_counts[emotion_index] += 1
 
             # 1~4위 감정 추출
-            top_emotions = sorted(
-                set(all_emotion_tags), key=all_emotion_tags.count, reverse=True
-            )[:4]
+            max_emotion_indices = sorted(
+                range(len(emotion_counts)),
+                key=lambda i: emotion_counts[i],
+                reverse=True
+            )
+            selected_indices = []
+            for index in max_emotion_indices:
+                if emotion_counts[index] != 0:
+                    selected_indices.append(index)
+                    if len(selected_indices) == 4:
+                        break
+
+            all_indices = list(range(12))
+            remaining_indices = [i for i in all_indices if i not in selected_indices]
 
             # 5위~12위 감정 추출
-            other_emotions = sorted(
-                set(all_emotion_tags), key=all_emotion_tags.count, reverse=True
-            )[4:12]
+            # other_emotions = sorted(
+            #     set(all_emotion_tags), key=all_emotion_tags.count, reverse=True
+            # )[4:12]
 
             # 상위 감정 태그를 가진 게시물 70%로 추천
             recommended_posts_70_percent = Post.objects.filter(
-                sings_emotion__in=top_emotions
+                sings_emotion__in=max_emotion_indices
             ).order_by("?")[:7]
 
             # 나머지 감정 태그를 가진 게시물 30%로 추천
             recommended_posts_30_percent = Post.objects.filter(
-                sings_emotion__in=other_emotions
+                sings_emotion__in=remaining_indices
             ).order_by("?")[:3]
 
-            recommended_posts = (
-                recommended_posts_70_percent | recommended_posts_30_percent
-            )
+            recommended_posts = recommended_posts_70_percent | recommended_posts_30_percent
 
             recommended_posts_seri = RecommendSerializer(recommended_posts, many=True)
 
