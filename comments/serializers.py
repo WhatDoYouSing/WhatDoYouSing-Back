@@ -48,22 +48,17 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
     relikes_count = serializers.SerializerMethodField()
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
-    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
-    #is_reliked = serializers.SerializerMethodField()
     liked_by_user = serializers.SerializerMethodField()
 
     class Meta:
         model = Recomment
         fields = [
             "recomment_id",
-            "post",
             "author",
             "author_nickname",
             "author_profile",
             "com_content",
-            "com_relikes",
             "relikes_count",
-            #"is_reliked",
             "liked_by_user",
             "created_at"
         ]
@@ -72,18 +67,26 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
     def get_liked_by_user(self, obj):
         request = self.context.get('request')
         if request and request.user.is_authenticated:
-            return request.user in obj.com_likes.all()
+            return request.user in obj.com_relikes.all()
         return False
+    def get_author_nickname(self, obj):
+        return obj.author.nickname
+    def get_author_profile(self, obj):
+        return obj.author.profile
+    def get_relikes_count(self, obj):
+        return obj.com_relikes.count()
+
+        
 
 
 class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField()
     recomments = RecommentSerializer(many=True, read_only=True)
     recomments_count = serializers.SerializerMethodField()
+
     author_nickname = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
     com_count = serializers.SerializerMethodField()
-    #is_liked = serializers.SerializerMethodField()
     liked_by_user = serializers.SerializerMethodField()
 
     class Meta:
@@ -95,9 +98,7 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
             "author_nickname",
             "author_profile",
             "com_content",
-            "com_likes",
             "likes_count",
-            #"is_liked",
             "liked_by_user",
             "recomments",
             "recomments_count",
@@ -106,11 +107,22 @@ class CommentSerializer(FunctionMixin, serializers.ModelSerializer):
         ]
     read_only_fields = ["author"]
 
+
+    def get_author_nickname(self, obj):
+        return obj.author.nickname
+    def get_author_profile(self, obj):
+        return obj.author.profile
+    def get_likes_count(self, obj):
+        return obj.com_likes.count()
     def get_liked_by_user(self, obj):
         request = self.context.get('request')
         if request and request.user.is_authenticated:
             return request.user in obj.com_likes.all()
         return False
+    def get_recomments_count(self, obj):
+        return Recomment.objects.filter(comment=obj.comment_id).count()
+    
+
 
 
 class MypageCommentSerializer(FunctionMixin, serializers.ModelSerializer):
