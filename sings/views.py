@@ -101,8 +101,10 @@ class RecommendView(views.APIView):
     def get(self, request):
         # 로그인 했을 때 -> 새로운 추천시스템(1안)
         if request.user.is_authenticated:  # Check if the user is authenticated
+            user = request.user
             # (1)내가 저장한 (북마크) 게시물의 감정 가져오기
-            saved_emotions = Emotion.objects.filter(emo_post__scrap=request.user)
+            saved_posts = Post.objects.filter(scrap=user)
+            saved_emotions = saved_posts.sings_emotion
             # (2)내가 감정을 남긴 게시물의 감정 가져오기
             emo_emotions = Emotion.objects.filter(emo_post__content=request.user)
             # (3)내가 댓글을 남긴 게시물의 감정 가져오기
@@ -112,7 +114,8 @@ class RecommendView(views.APIView):
                 emo_post_id__in=commented_posts_pks
             )
             # (4)내가 남긴 가사의 감정 가져오기
-            lyric_emotions = Emotion.objects.filter(emo_post__author=request.user)
+            written_sings = Post.objects.filter(author=request.user)
+            lyric_emotions = written_sings.sings_emotion
 
             # 4가지 경로로 가져온 감정 쿼리셋 합산
             all_emotions = (
