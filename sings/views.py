@@ -164,7 +164,7 @@ class RecommendView(views.APIView):
                             "data": recommended_posts_seri.data,
                             "page": page,
                             "totalPage":total_pages,
-                            "view": 10
+                            "view": len(recommended_posts_obj)
                         },
                         status=status.HTTP_200_OK,
                     )
@@ -218,7 +218,7 @@ class RecommendView(views.APIView):
                         "data": recommended_posts_seri.data,
                         "page": page,
                         "totalPage":total_pages,
-                        "view": 10
+                        "view": len(recommended_posts_obj)
                     },
                     status=status.HTTP_200_OK,
                 )
@@ -241,7 +241,7 @@ class RecommendView(views.APIView):
                         "data": recommended_posts_seri.data,
                         "page": page,
                         "totalPage":total_pages,
-                        "view": page_size
+                        "view": len(recommended_posts_obj)
                     },
                     status=status.HTTP_200_OK,
                 )
