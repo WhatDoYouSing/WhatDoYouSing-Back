@@ -1,12 +1,12 @@
 # WhatDoYouSing-Back
 
-## 🎶 프로젝트 소개
+## 🎶 프로젝트 소개 
 <p align="center">
- <img src="https://github.com/JiwonChoi0805/Ewha-Market/assets/126451052/6a6a6599-6fb0-4fba-8815-35df0aeba1c7" width="80"/>
+ <img src="https://github.com/WhatDoYouSing/WhatDoYouSing-Front/assets/55123397/7c19327e-abf0-4976-8264-54de0aa435cc"/>
 </p>
 <br/>
 이화여대 멋쟁이 사자처럼 11기 졸업 프로젝트 3팀 서비스 '왓두유씽?'입니다.
-<br/>
+<br/><br/>
 
 ## 💻 개발 기간
 2023.11.02~ 기획디자인
@@ -25,4 +25,4 @@
   ##### Environment
   <img src="https://img.shields.io/badge/visualstudiocode-007ACC?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
  ##### Development 
-  <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/django-092E20?style=for-the-badge&logo=django&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
+  <img src="https://img.shields.io/badge/python-3776AB?style=flat-square&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/django-092E20?style=flat-square&logo=django&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/amazonaws-232F3E?style=flat-square&logo=amazonaws&logoColor=white">
