@@ -101,71 +101,150 @@ class RecommendView(views.APIView):
     def get(self, request):
         # 로그인 했을 때 -> 새로운 추천시스템(1안)
         if request.user.is_authenticated:  # Check if the user is authenticated
+            page = int(request.GET.get('page'))
             user = request.user
-            emotion_counts = [0] * 12 
-            # (1)내가 저장한 (북마크) 게시물의 감정 가져오기
-            scraped_posts = user.scraped_posts.all()
-            for post in scraped_posts:
-                emotion_index = post.sings_emotion
-                emotion_counts[emotion_index] += 1
-            # (2)내가 감정을 남긴 게시물의 감정 가져오기
-            emo_emotions = Emotion.objects.filter(emo_user=user).all()
-            for emotion in emo_emotions:
-                emotion_index = emotion.emo_post.sings_emotion
-                emotion_counts[emotion_index] += 1
-            # (3)내가 댓글을 남긴 게시물의 감정 가져오기
-            user_comments = Comment.objects.filter(author=user).all()
-            for comment in user_comments:
-                emotion_index = comment.post.sings_emotion
-                emotion_counts[emotion_index] += 1
-            # (4)내가 남긴 가사의 감정 가져오기
-            written_sings = Post.objects.filter(author=user).all()
-            for sing in written_sings:
-                emotion_index = sing.sings_emotion
-                emotion_counts[emotion_index] += 1
+            page_size =10
+            if (page==1):
+                emotion_counts = [0] * 12 
+                # (1)내가 저장한 (북마크) 게시물의 감정 가져오기
+                scraped_posts = user.scraped_posts.all()
+                for post in scraped_posts:
+                    emotion_index = post.sings_emotion
+                    emotion_counts[emotion_index] += 1
+                # (2)내가 감정을 남긴 게시물의 감정 가져오기
+                emo_emotions = Emotion.objects.filter(emo_user=user).all()
+                for emotion in emo_emotions:
+                    emotion_index = emotion.emo_post.sings_emotion
+                    emotion_counts[emotion_index] += 1
+                # (3)내가 댓글을 남긴 게시물의 감정 가져오기
+                user_comments = Comment.objects.filter(author=user).all()
+                for comment in user_comments:
+                    emotion_index = comment.post.sings_emotion
+                    emotion_counts[emotion_index] += 1
+                # (4)내가 남긴 가사의 감정 가져오기
+                written_sings = Post.objects.filter(author=user).all()
+                for sing in written_sings:
+                    emotion_index = sing.sings_emotion
+                    emotion_counts[emotion_index] += 1
+                # 1~4위 감정 추출
+                max_emotion_indices = sorted(
+                    range(len(emotion_counts)),
+                    key=lambda i: emotion_counts[i],
+                    reverse=True
+                )
+                selected_indices = []
+                for index in max_emotion_indices:
+                    if emotion_counts[index] != 0:
+                        selected_indices.append(index)
+                selected_indices = sorted(selected_indices, reverse=True)[:4]
+                print(selected_indices)
+                if not selected_indices:
+                    all_posts = Post.objects.all()
+                    recommended_posts = list(all_posts.values_list('id', flat=True))[:100]
+                    random.shuffle(recommended_posts)
 
-            # 1~4위 감정 추출
-            max_emotion_indices = sorted(
-                range(len(emotion_counts)),
-                key=lambda i: emotion_counts[i],
-                reverse=True
-            )
-            selected_indices = []
-            for index in max_emotion_indices:
-                if emotion_counts[index] != 0:
-                    selected_indices.append(index)
-                    if len(selected_indices) == 4:
-                        break
+                    # ran_size = min(10, len(all_posts))  # 리스트 크기보다 크지 않은 값을 선택
+                    # random_posts = random.sample(list(all_posts), ran_size)
+                    # random_posts_seri = RecommendSerializer(random_posts, many=True)
 
-            all_indices = list(range(12))
-            remaining_indices = [i for i in all_indices if i not in selected_indices]
+                    user.recomlist =  ','.join(map(str, recommended_posts))
+                    user.save()
+                    
+                    total_pages = math.ceil(len(recommended_posts) / page_size)
+                    recommended_posts = recommended_posts[:10]
+                    print(recommended_posts)
+                    recommended_posts_obj = []
+                    for post_id in recommended_posts:
+                        post = Post.objects.get(id=post_id)
+                        recommended_posts_obj.append(post)
+                    recommended_posts_seri = RecommendSerializer(recommended_posts_obj, many=True)
+                    return Response(
+                        {
+                            "message": "감정 기록이 없는 로그인 유저 추천게시물 조회 성공",
+                            "data": recommended_posts_seri.data,
+                            "page": page,
+                            "totalPage":total_pages,
+                            "view": 10
+                        },
+                        status=status.HTTP_200_OK,
+                    )
+                # 나머지 감정 추출
+                
+                all_indices = list(range(12))
+                remaining_indices = [i for i in all_indices if i not in selected_indices]
+                
+                max_size_1=70
+                max_size_2=30
 
-            # 5위~12위 감정 추출
-            # other_emotions = sorted(
-            #     set(all_emotion_tags), key=all_emotion_tags.count, reverse=True
-            # )[4:12]
+                recommended_posts_70_percent = Post.objects.filter(
+                    sings_emotion__in=selected_indices
+                )
+                recommended_posts_30_percent = Post.objects.filter(
+                    sings_emotion__in=remaining_indices
+                )
+                if(recommended_posts_70_percent.count()<max_size_1): 
+                    max_size_1=recommended_posts_70_percent.count()
+                    max_size_2=min((int)(max_size_1*3/7),recommended_posts_30_percent.count())
 
-            # 상위 감정 태그를 가진 게시물 70%로 추천
-            recommended_posts_70_percent = Post.objects.filter(
-                sings_emotion__in=max_emotion_indices
-            ).order_by("?")[:7]
+                shuffled_70_posts = list(recommended_posts_70_percent.values_list('id', flat=True))
+                random.shuffle(shuffled_70_posts)
+                posts_for_70 = shuffled_70_posts[:max_size_1]
 
-            # 나머지 감정 태그를 가진 게시물 30%로 추천
-            recommended_posts_30_percent = Post.objects.filter(
-                sings_emotion__in=remaining_indices
-            ).order_by("?")[:3]
 
-            recommended_posts = recommended_posts_70_percent | recommended_posts_30_percent
+                shuffled_30_posts = list(recommended_posts_30_percent.values_list('id', flat=True))
+                random.shuffle(shuffled_30_posts)
+                posts_for_30 = shuffled_30_posts[:max_size_2]
 
-            recommended_posts_seri = RecommendSerializer(recommended_posts, many=True)
 
-            return Response(
-                {
-                    "message": "로그인 유저 추천게시물 조회 성공",
-                    "data": recommended_posts_seri.data,
-                },
-                status=status.HTTP_200_OK,
-            )
+                recommended_posts = posts_for_70 + posts_for_30
+                random.shuffle(recommended_posts)
+                print(recommended_posts)
+
+                user.recomlist =  ','.join(map(str, recommended_posts))
+                user.save()
+                
+                total_pages = math.ceil(len(recommended_posts) / page_size)
+                recommended_posts = recommended_posts[:10]
+                print(recommended_posts)
+                recommended_posts_obj = []
+                for post_id in recommended_posts:
+                    post = Post.objects.get(id=post_id)
+                    recommended_posts_obj.append(post)
+
+                recommended_posts_seri = RecommendSerializer(recommended_posts_obj, many=True)
+                return Response(
+                    {
+                        "message": "로그인 유저 추천게시물 조회 성공",
+                        "data": recommended_posts_seri.data,
+                        "page": page,
+                        "totalPage":total_pages,
+                        "view": 10
+                    },
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                recomlist_text = user.recomlist
+                recomlist = recomlist_text.split(',')
+                total_pages = math.ceil(len(recomlist) / page_size)
+                
+                start_index = (page - 1) * page_size
+                end_index = page * page_size
+                recommended_posts = recomlist[start_index:end_index]
+                recommended_posts_obj = []
+                for post_id in recommended_posts:
+                    post = Post.objects.get(id=post_id)
+                    recommended_posts_obj.append(post)
+                recommended_posts_seri = RecommendSerializer(recommended_posts_obj, many=True)
+                return Response(
+                    {
+                        "message": "로그인 유저 추천게시물 조회 성공",
+                        "data": recommended_posts_seri.data,
+                        "page": page,
+                        "totalPage":total_pages,
+                        "view": page_size
+                    },
+                    status=status.HTTP_200_OK,
+                )
 
         # 로그인 안했을 때 -> 기존의 추천 시스템(랜덤 pk값으로 추천 게시물 선정)
         else:

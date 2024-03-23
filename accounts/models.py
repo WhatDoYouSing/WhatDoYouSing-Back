@@ -13,6 +13,7 @@ class User(AbstractUser):
         (4,4)
     ]
     profile=models.IntegerField(choices=profile_choices, null=True, blank=True)
+    recomlist = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.username
