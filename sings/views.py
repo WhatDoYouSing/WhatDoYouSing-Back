@@ -137,27 +137,26 @@ class RecommendView(views.APIView):
                     if emotion_counts[index] != 0:
                         selected_indices.append(index)
                 selected_indices = sorted(selected_indices, reverse=True)[:4]
-                print(selected_indices)
-                if not selected_indices:
+
+                # 집계된 감정이 없는 경우
+                if not selected_indices: 
                     all_posts = Post.objects.all()
                     recommended_posts = list(all_posts.values_list('id', flat=True))[:100]
                     random.shuffle(recommended_posts)
-
-                    # ran_size = min(10, len(all_posts))  # 리스트 크기보다 크지 않은 값을 선택
-                    # random_posts = random.sample(list(all_posts), ran_size)
-                    # random_posts_seri = RecommendSerializer(random_posts, many=True)
 
                     user.recomlist =  ','.join(map(str, recommended_posts))
                     user.save()
                     
                     total_pages = math.ceil(len(recommended_posts) / page_size)
                     recommended_posts = recommended_posts[:10]
-                    print(recommended_posts)
+                    
                     recommended_posts_obj = []
                     for post_id in recommended_posts:
                         post = Post.objects.get(id=post_id)
                         recommended_posts_obj.append(post)
+
                     recommended_posts_seri = RecommendSerializer(recommended_posts_obj, many=True)
+
                     return Response(
                         {
                             "message": "감정 기록이 없는 로그인 유저 추천게시물 조회 성공",
@@ -168,13 +167,14 @@ class RecommendView(views.APIView):
                         },
                         status=status.HTTP_200_OK,
                     )
-                # 나머지 감정 추출
                 
+                # 나머지 감정 추출
                 all_indices = list(range(12))
                 remaining_indices = [i for i in all_indices if i not in selected_indices]
                 
-                max_size_1=70
-                max_size_2=30
+                # 추천시스템에 의한 추천 Post list
+                max_size_1 = 70
+                max_size_2 = 30
 
                 recommended_posts_70_percent = Post.objects.filter(
                     sings_emotion__in=selected_indices
@@ -190,28 +190,43 @@ class RecommendView(views.APIView):
                 random.shuffle(shuffled_70_posts)
                 posts_for_70 = shuffled_70_posts[:max_size_1]
 
-
                 shuffled_30_posts = list(recommended_posts_30_percent.values_list('id', flat=True))
                 random.shuffle(shuffled_30_posts)
                 posts_for_30 = shuffled_30_posts[:max_size_2]
 
-
                 recommended_posts = posts_for_70 + posts_for_30
                 random.shuffle(recommended_posts)
-                print(recommended_posts)
+
+                # 나머지는 랜덤으로 반환
+                total_posts = min(100, Post.objects.count())
+                remaining_size = total_posts - len(recommended_posts)
+                remaining_posts = set()
+
+                # 중복되지 않는 Post 추가
+                all_post_ids = list(Post.objects.values_list('id', flat=True))
+                while remaining_size > 0:
+                    random_post_id = random.choice(all_post_ids)
+                    if random_post_id not in recommended_posts:
+                        remaining_posts.add(random_post_id)
+                        remaining_size -= 1
+                remaining_posts = list(remaining_posts)
+                random.shuffle(remaining_posts)
+
+                recommended_posts += remaining_posts
 
                 user.recomlist =  ','.join(map(str, recommended_posts))
                 user.save()
                 
                 total_pages = math.ceil(len(recommended_posts) / page_size)
                 recommended_posts = recommended_posts[:10]
-                print(recommended_posts)
+                
                 recommended_posts_obj = []
                 for post_id in recommended_posts:
                     post = Post.objects.get(id=post_id)
                     recommended_posts_obj.append(post)
 
                 recommended_posts_seri = RecommendSerializer(recommended_posts_obj, many=True)
+
                 return Response(
                     {
                         "message": "로그인 유저 추천게시물 조회 성공",
