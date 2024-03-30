@@ -54,6 +54,7 @@ class RecommentSerializer(FunctionMixin, serializers.ModelSerializer):
         model = Recomment
         fields = [
             "recomment_id",
+            "post",
             "author",
             "author_nickname",
             "author_profile",

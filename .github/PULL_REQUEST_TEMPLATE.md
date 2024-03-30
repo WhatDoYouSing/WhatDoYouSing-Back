@@ -1,6 +1,6 @@
 ## 🎵 Issue
 
-close #180
+close #이슈번호
 
 ## 🔨 작업 내용
 
