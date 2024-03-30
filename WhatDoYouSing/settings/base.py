@@ -97,7 +97,7 @@ REST_FRAMEWORK = {
 }
 REST_USE_JWT = True
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
     #'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
@@ -117,7 +117,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware', # 추가
-    #'allauth.account.middleware.AccountMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 # cors 
