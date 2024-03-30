@@ -15,6 +15,7 @@ urlpatterns = [
     #path('emosearchlatest/',SearchEmoLatestView.as_view()),
     #path('emosearchlikes/',SearchEmoLikesView.as_view()),
     #path('emosearchcomments/',SearchEmoCommentsView.as_view()),
+    path('recommend/test/',RecommendTestView.as_view()),
     
     
 ]

@@ -107,7 +107,7 @@ class CommentsCollectView(views.APIView, PaginationHandlerMixin):
     
         # Serialize the sorted combined instances
         combined_serializers = [
-            MypageCommentSerializer(instance) if isinstance(instance, Comment) else RecommentSerializer(instance)
+            MypageCommentSerializer(instance) if isinstance(instance, Comment) else RecommentGetSerializer(instance)
             for instance in combined_instances
         ]
 
