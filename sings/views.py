@@ -219,12 +219,12 @@ class RecommendView(views.APIView):
                 while remaining_size > 0:
                     random_post_id = random.choice(all_post_ids)
                     if random_post_id not in recommended_posts:
-                        remaining_posts.add(random_post_id)
+                        recommended_posts.add(random_post_id)
                         remaining_size -= 1
-                remaining_posts = list(remaining_posts)
+                # remaining_posts = list(remaining_posts)
                 random.shuffle(remaining_posts)
 
-                recommended_posts += remaining_posts
+                # recommended_posts += remaining_posts
 
                 user.recomlist = ",".join(map(str, recommended_posts))
                 user.save()
