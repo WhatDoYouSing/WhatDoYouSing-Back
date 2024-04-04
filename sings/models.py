@@ -9,6 +9,8 @@ class Sings(models.Model):
     #recomment = models.ForeignKey(Recomment, related_name='sings_recomment',on_delete=models.CASCADE)
     sings_post=models.ForeignKey(Post, related_name='sings_posts',on_delete=models.CASCADE)
     
+class Memory(models.Model):
+    non_user_recomlist=models.TextField()
 
 '''    
     def get_comment_count(self):

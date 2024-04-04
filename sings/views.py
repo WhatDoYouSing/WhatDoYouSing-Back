@@ -101,7 +101,7 @@ class RecommendView(views.APIView):
     def get(self, request):
         # 로그인 했을 때 -> 새로운 추천시스템(1안)
         if request.user.is_authenticated:  # Check if the user is authenticated
-            page = int(request.GET.get("page"))
+            page = int(request.GET.get("page", 1))
             user = request.user
             page_size = 10
             if page == 1:
@@ -279,19 +279,54 @@ class RecommendView(views.APIView):
 
         # 로그인 안했을 때 -> 기존의 추천 시스템(랜덤 pk값으로 추천 게시물 선정)
         else:
-            all_posts = Post.objects.all()
-            ran_size = min(10, len(all_posts))  # 리스트 크기보다 크지 않은 값을 선택
-            random_posts = random.sample(list(all_posts), ran_size)
-            random_posts_seri = RecommendSerializer(random_posts, many=True)
+            # all_posts = Post.objects.all()
+            # ran_size = min(10, len(all_posts))  # 리스트 크기보다 크지 않은 값을 선택
+            # random_posts = random.sample(list(all_posts), ran_size)
+            # random_posts_seri = RecommendSerializer(random_posts, many=True)
 
+            # return Response(
+            #     {
+            #         "message": "비로그인 유저 추천게시물 조회 성공",
+            #         "data": random_posts_seri.data,
+            #     },
+            #     status=status.HTTP_200_OK,
+            # )
+            page_size = 10
+            page = int(request.GET.get("page", 1))
+            recomlist_text = Memory.objects.get(id=1).non_user_recomlist
+            recomlist = recomlist_text.split(",")
+            total_pages = math.ceil(len(recomlist) / page_size)
+
+            start_index = (page - 1) * page_size
+            end_index = page * page_size
+            recommended_posts = recomlist[start_index:end_index]
+            recommended_posts_obj = []
+            for post_id in recommended_posts:
+                post = Post.objects.get(id=post_id)
+                recommended_posts_obj.append(post)
+            recommended_posts_seri = RecommendSerializer(
+                recommended_posts_obj, many=True
+            )
             return Response(
                 {
-                    "message": "비로그인 유저 추천게시물 조회 성공",
-                    "data": random_posts_seri.data,
+                    "message": "비로그인 유저 추천게시물 조회 성공!",
+                    "data": recommended_posts_seri.data,
+                    "page": page,
+                    "totalPage": total_pages,
+                    "view": len(recommended_posts_obj),
                 },
                 status=status.HTTP_200_OK,
             )
+def update_non_user_recomlist():
+    all_posts = Post.objects.all()
+    recommended_posts = list(all_posts.values_list("id", flat=True))[
+        :100
+    ]
+    random.shuffle(recommended_posts)
 
+    recomlist = Memory.objects.get(id=1)
+    recomlist.non_user_recomlist = ",".join(map(str, recommended_posts))
+    recomlist.save()
 
 # 카드 추천 시스템 TEST
 class RecommendTestView(views.APIView):
