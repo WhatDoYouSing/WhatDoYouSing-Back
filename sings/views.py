@@ -207,24 +207,19 @@ class RecommendView(views.APIView):
                 posts_for_30 = shuffled_30_posts[:max_size_2]
 
                 recommended_posts = posts_for_70 + posts_for_30
-                random.shuffle(recommended_posts)
 
                 # 나머지는 랜덤으로 반환
                 total_posts = min(100, Post.objects.count())
                 remaining_size = total_posts - len(recommended_posts)
-                remaining_posts = set()
 
                 # 중복되지 않는 Post 추가
                 all_post_ids = list(Post.objects.values_list("id", flat=True))
-                while remaining_size > 0:
-                    random_post_id = random.choice(all_post_ids)
-                    if random_post_id not in recommended_posts:
-                        remaining_posts.add(random_post_id)
-                        remaining_size -= 1
-                remaining_posts = list(remaining_posts)
-                random.shuffle(remaining_posts)
+                all_remain_posts = [post for post in all_post_ids if post not in recommended_posts]
+                random.shuffle(all_remain_posts)
 
-                recommended_posts += remaining_posts
+
+                recommended_posts += all_remain_posts[:remaining_size]
+                random.shuffle(recommended_posts)
 
                 user.recomlist = ",".join(map(str, recommended_posts))
                 user.save()
