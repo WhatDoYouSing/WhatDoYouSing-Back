@@ -8,7 +8,7 @@ def start():
     # scheduler.add_jobstore(DjangoJobStore(), 'djangojobstore')
     # register_events(scheduler)
 
-    @scheduler.scheduled_job('cron', minute='*', second='0')
+    @scheduler.scheduled_job('cron', minute='*/10', second='0')
     def auto_check():
         update_non_user_recomlist()
 
